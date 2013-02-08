@@ -1,0 +1,37 @@
+CREATE TABLE emp(
+	empnum int PRIMARY KEY,
+	name varchar(80),
+	sex varchar(2),
+	address varchar(80),
+	hire_date date
+);
+
+CREATE TABLE owner(
+	name varchar(80),
+	username varchar(60) NOT NULL,
+	pword varchar(60),
+	CONSTRAINT owner_pkey PRIMARY KEY (username)
+);
+
+CREATE TABLE customer(
+	name varchar(80),
+	email varchar(30),
+	address varchar(70)
+);
+
+CREATE TABLE product(
+	prod_id int PRIMARY KEY,
+	prod_name varchar(60),
+	prod_desc varchar(80),
+	prod_img varchar(60),
+	prod_price int,
+	exp_date date,
+	mfg_date date
+);
+
+CREATE TABLE __user(
+	id serial PRIMARY KEY,
+	uname varchar(60),
+	pword varchar(30),
+	user_role varchar(10)
+);
