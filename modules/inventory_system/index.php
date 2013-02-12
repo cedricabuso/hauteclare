@@ -14,18 +14,30 @@
 		if (!$conn) {
 			die("Error in connection: " . pg_last_error());
 		}
-		/*//id submit is executed
+		$date = date("Y-m-d");
+		$existing=false;
+		$result = pg_query($conn, "SELECT * FROM inventory");
+		$count=pg_num_rows($result);
+		while ($row = pg_fetch_row($result)){ if($row[2]==$date){ $existing=true; break;} }
+		if(!$existing){
+			$result = pg_query($conn, "SELECT prod_id FROM product");
+			while ($row = pg_fetch_row($result)){
+				pg_query($conn, "INSERT INTO inventory (prod_id, prod_quantity, inv_date) VALUES({$row[0]},1, '{$date}')");
+			}
+		}
+		//id submit is executed
 		if(isset($_POST['submit'])){
-			$id = $_POST['id'];
-			//connect
-			$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
-			if (!$conn) {
-				die("Error in connection: " . pg_last_error());
+			$array=array();
+			$array_id=array();
+			echo $count;
+			
+			for($i=0;$i<$count;$i++){
+				$array[$i]=$_POST["prod{$i}"];
+				$array_id[$i]=$_POST["prod_id{$i}"];
 			}
 			//execute query then close connection
-			pg_query($conn, "INSERT INTO product (prod_id, prod_name, prod_desc, prod_img, prod_price) VALUES('{$id}','{$name}', '{$description}', '{$name}', '{$price}')");
-			pg_close($conn);
-		}*/
+			for($i=0;$i<$count;$i++){ pg_query($conn, "UPDATE inventory SET prod_quantity='{$array[$i]}' WHERE prod_id={$array_id[$i]}"); }
+		}
 	?>
 	<body>
 		<div class="wrapper">
@@ -53,7 +65,7 @@
 						</ul>
 					</div>
 					<div class="mid-right">
-						<h1 class="gap-1">Inventory System</h1>
+						<h1 class="gap-1">Inventory System <br> <span class="date"><?php echo date("F j, Y - l"); ?></span></h1>
 						
 						<form name="editQuantity" method="post" action="">
 							<table class="viewAllTable">
@@ -62,24 +74,24 @@
 									<th>Name</th>
 									<th>Stock Quantity</th>
 								</tr>
-								</tr>
 								<?php //load the list of existing products
 									$i=0;
 									$result = pg_query($conn, "SELECT * FROM product");
+									$stock = pg_query($conn, "SELECT * FROM inventory");
 									while ($row = pg_fetch_row($result)) {
+										while($quan = pg_fetch_row($stock)){
+											if($quan[0]==$row[0]) break;
+										}
 										echo "<tr class='TDR'>";
-										echo "<td class='TDR'>{$row[0]}</td><td class='TDR'>{$row[1]}</td> <td class='TDR description'></td>" ;
-										echo "<td class='TDR'>
-											  <form name='myForm{$i}' method='post' action='../edit_product/index.php'> 
-												<input type='hidden' name='id' value='{$row[0]}'/>
-												<input type='submit' name='edit' id='submit' value='Edit'/>
-											  </form>
-											  </td>";
+										echo "<td class='TDR'>{$row[0]}</td><td class='TDR'>{$row[1]}</td> <td class='TDR'><input class='deleteId' name='prod{$i}' type='text' value='{$quan[1]}'/></td>" ;
+										echo "<input type='hidden' name='prod_id{$i}' value='{$row[0]}'>";
 										echo "</tr>";
+										$i++;
 									}
 									pg_close($conn);	//close connection
 								?>
 							</table>
+							<input type="submit" name="submit" value="Edit">
 						</form>
 					</div>
 				</div>
