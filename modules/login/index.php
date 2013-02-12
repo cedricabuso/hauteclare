@@ -53,6 +53,7 @@
 						<ul class="left-nav">
 						  <li><a href="../login/">Login</a></li>
 						  <li><a href="../sign_up/">Sign Up</a></li>
+						  <li><a href="../inventory_system/">Inventory System</a></li>
 						  <li><a href="../add_product/">Add Product</a></li>
 						  <li><a href="../delete_product/">Delete Product</a></li>
 						</ul>
