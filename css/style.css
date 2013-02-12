@@ -164,6 +164,12 @@ table.table{
 .TDR{
 	border: solid 1px #000;
 }
+.description{
+	text-align: left;
+}
+.green{
+	color: green;
+}
 .red{
 	color:red;
 }

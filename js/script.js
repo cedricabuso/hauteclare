@@ -18,7 +18,7 @@ function setPostValue(id){
 
 flag=0;
 function imgError(source){
-	if(flag==0) document.getElementById(source).src="../../products/"+source+".png";	
+	if(flag==0){ document.getElementById(source).src="../../products/"+source+".png"; flag++;}
 	else {showErrorToast(source+" image is not found."); flag=0;}
 }
 

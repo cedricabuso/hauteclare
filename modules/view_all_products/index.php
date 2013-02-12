@@ -26,11 +26,18 @@
 					<div class="mid-left">
 						<h2 class="gap-2">Menu</h2>
 						<ul class="left-nav">
-						  <li><a href="#">Home</a></li>
-						  <li><a href="#">View Products</a></li>
+						  <li><a href="../../index.html">Home</a></li>
+						  <li><a href="../view_all_products/">View Products</a></li>
 						  <li><a href="#">Order Online</a></li>
 						  <li><a href="#">Contact</a></li>
 						  <li><a href="#">About Us</a></li>
+						</ul>
+						<h2 class="gap-2">Employee</h2>
+						<ul class="left-nav">
+						  <li><a href="../login/">Login</a></li>
+						  <li><a href="../sign_up/">Sign Up</a></li>
+						  <li><a href="../add_product/">Add Product</a></li>
+						  <li><a href="../delete_product/">Delete Product</a></li>
 						</ul>
 					</div>
 					<div class="mid-right">
@@ -39,9 +46,7 @@
 							<table class="viewAllTable">
 								<tr>
 									<td class="deleteId">Image</td>
-									<td class="deleteId">Name</td>
-									<td class="deleteId">Price</td>
-									<td class="deleteId">Description</td>
+									<td class="deleteId">Information</td>
 									<td class="deleteId">Action</td>
 								</tr>
 								<?php //load the list of existing products
@@ -49,7 +54,7 @@
 									$result = pg_query($conn, "SELECT * FROM product");
 									while ($row = pg_fetch_row($result)) {
 										echo "<tr class='TDR'>";
-										echo "<td class='TDR'><img id='{$row[1]}' src='../../products/$row[1].jpg' width='200' height='200' onerror='imgError(\"$row[1]\");'/></td> <td class='TDR'>$row[1]</td> <td class='TDR'>$row[4]</td> <td class='description TDR'>$row[2]</td>" ;
+										echo "<td class='TDR'><img id='{$row[1]}' src='../../products/$row[1].jpg' width='200' height='200' onerror='imgError(\"$row[1]\");'/></td> <td class='TDR description'> <b class='green'>Name:</b> $row[1] <br> <b class='green'>Price:</b> $row[4] <br> <b class='green'>Description:</b> $row[2]</td>" ;
 										echo "<td class='TDR'>
 											  <form name='myForm{$i}' method='post' action='../edit_product/index.php'> 
 												<input type='hidden' name='id' value='{$row[0]}'/>

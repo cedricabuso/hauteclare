@@ -29,6 +29,19 @@ CREATE TABLE product(
 	mfg_date date
 );
 
+CREATE TABLE inventory(
+	prod_id int REFERENCES product(prod_id),
+	prod_quantity int,
+	inv_date date
+);
+
+CREATE TABLE cashier(
+	prod_name varchar(60),
+	prod_quantity int,
+	prod_price int,
+	cash_date date
+);
+
 CREATE TABLE __user(
 	id serial PRIMARY KEY,
 	uname varchar(60),

@@ -39,11 +39,18 @@
 					<div class="mid-left">
 						<h2 class="gap-2">Menu</h2>
 						<ul class="left-nav">
-						  <li><a href="#">Home</a></li>
-						  <li><a href="#">View Products</a></li>
+						  <li><a href="../../index.html">Home</a></li>
+						  <li><a href="../view_all_products/">View Products</a></li>
 						  <li><a href="#">Order Online</a></li>
 						  <li><a href="#">Contact</a></li>
 						  <li><a href="#">About Us</a></li>
+						</ul>
+						<h2 class="gap-2">Employee</h2>
+						<ul class="left-nav">
+						  <li><a href="../login/">Login</a></li>
+						  <li><a href="../sign_up/">Sign Up</a></li>
+						  <li><a href="../add_product/">Add Product</a></li>
+						  <li><a href="../delete_product/">Delete Product</a></li>
 						</ul>
 					</div>
 					<div class="mid-right">

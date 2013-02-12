@@ -9,15 +9,14 @@
 	  <link href="../../css/jquery.toastmessage.css" rel="stylesheet" type="text/css">
 	  <link href="../../css/style.css" rel="stylesheet" type="text/css">
 	</head>
-	<?php //include for phpuploader class
-		require_once "../../phpuploader/include_phpuploader.php";
-		session_start();
-		//id submit is executed
+	<?php
+		$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
+		if (!$conn) {
+			die("Error in connection: " . pg_last_error());
+		}
+		/*//id submit is executed
 		if(isset($_POST['submit'])){
 			$id = $_POST['id'];
-			$name = $_POST['name'];
-			$description = $_POST['desc'];
-			$price = $_POST['price'];
 			//connect
 			$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
 			if (!$conn) {
@@ -26,7 +25,7 @@
 			//execute query then close connection
 			pg_query($conn, "INSERT INTO product (prod_id, prod_name, prod_desc, prod_img, prod_price) VALUES('{$id}','{$name}', '{$description}', '{$name}', '{$price}')");
 			pg_close($conn);
-		}
+		}*/
 	?>
 	<body>
 		<div class="wrapper">
@@ -54,49 +53,32 @@
 						</ul>
 					</div>
 					<div class="mid-right">
-						<h1 class="gap-1">Add Product</h1>
+						<h1 class="gap-1">Inventory System</h1>
 						
-						<form name="addProduct" onsubmit="return ValidateAddProduct();" method="post" action="">
-							<table class="table">
+						<form name="editQuantity" method="post" action="">
+							<table class="viewAllTable">
 								<tr>
-									<td>ID</td>
-									<td><input type="text" id="id" name="id" onchange="isNumber('id');"/></td>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Stock Quantity</th>
 								</tr>
 								</tr>
-								<tr>
-									<td>Name</td>
-									<td><input type="text" id="name" name="name" onchange="isLetter('name');"/></td>
-								</tr>
-								<tr>
-									<td>Price</td>
-									<td><input type="text" id="price" name="price" onchange="isNumber('price');"/></td>
-								</tr>
-								<tr>
-									<td>Description</td>
-									<td><textarea name="desc" id="desc" rows="5" cols="30" placeholder="Put description here ... "></textarea></td>
-								</tr>
-								<tr>
-									<td>Image</td>
-									<td><?php //initialize phpuploader
-											$uploader=new PhpUploader();
-											$uploader->MultipleFilesUpload=false;
-											$uploader->InsertText="Upload Image( Max:10MB )";
-											$uploader->MaxSizeKB=1024000;	
-											$uploader->AllowedFileExtensions="jpeg,jpg,png";
-											$uploader->SaveDirectory="../../products/";
-											$uploader->Render();?>
-											<br/>File name of image should be same with product name. (E.g. Better Than Sex Cake.jpg)<br> Accepts <b class="red">*.jpeg, *.jpg and *.png</b> images only.
-											<script type='text/javascript'>
-												function CuteWebUI_AjaxUploader_OnTaskComplete(task){
-													showSuccessToast(task.FileName + " is uploaded!");
-												}
-											</script>
-									</td>
-								</tr>
-								<tr>
-									<td></td>
-									<td><input type="submit" name="submit" value="Add Product"></td>
-								</tr>
+								<?php //load the list of existing products
+									$i=0;
+									$result = pg_query($conn, "SELECT * FROM product");
+									while ($row = pg_fetch_row($result)) {
+										echo "<tr class='TDR'>";
+										echo "<td class='TDR'>{$row[0]}</td><td class='TDR'>{$row[1]}</td> <td class='TDR description'></td>" ;
+										echo "<td class='TDR'>
+											  <form name='myForm{$i}' method='post' action='../edit_product/index.php'> 
+												<input type='hidden' name='id' value='{$row[0]}'/>
+												<input type='submit' name='edit' id='submit' value='Edit'/>
+											  </form>
+											  </td>";
+										echo "</tr>";
+									}
+									pg_close($conn);	//close connection
+								?>
 							</table>
 						</form>
 					</div>
