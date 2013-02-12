@@ -36,6 +36,7 @@ CREATE TABLE inventory(
 );
 
 CREATE TABLE cashier(
+	prod_id int REFERENCES product(prod_id),
 	prod_name varchar(60),
 	prod_quantity int,
 	prod_price int,
