@@ -1,29 +1,52 @@
-Codename: hauteclare
+Codename: 
 =======
-Project: Ahl's Cake Inventory and Cashier System
+hauteclare
+Project: 
+=======
+Ahl's Cake Inventory and Cashier System
 
 Developers:
-	Abuso, Ray Cedric Louis
-	Ramilo, Jericko
-	Rubenecia, Areeya
-	Sejalbo, Charmaine
-	Tumbali, Kimberly Anne
+
+Abuso, Ray Cedric Louis
+
+Ramilo, Jericko
+
+Rubenecia, Areeya
+
+Sejalbo, Charmaine
+
+Tumbali, Kimberly Anne
 	
 Modules Under Development:
-	-Invetory System
-	-Cashier System
-	-Employee Information
-	-Income Graphs
-	-Bulk Order
-	-Online Payment
-	-Inquiring Prices
-	-Comment/Suggestion
-	-Product Viewing/Advertising
-	-Access(Sessions)
+
+-Invetory System
+
+-Cashier System
+
+-Employee Information
+
+-Income Graphs
+
+-Bulk Order
+
+-Online Payment
+
+-Inquiring Prices
+
+-Comment/Suggestion
+
+-Product Viewing/Advertising
+
+-Access(Sessions)
 	
 Technology Used:
-	-HTML
-	-Javascript
-	-JQuery
-	-CSS
-	-PHP
+
+-HTML
+
+-Javascript
+
+-JQuery
+
+-CSS
+
+-PHP
