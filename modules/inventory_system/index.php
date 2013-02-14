@@ -17,7 +17,6 @@
 		$date = date("Y-m-d");
 		$existing=false;
 		$result = pg_query($conn, "SELECT * FROM inventory");
-		$count=pg_num_rows($result);
 		while ($row = pg_fetch_row($result)){ if($row[2]==$date){ $existing=true; break;} }
 		if(!$existing){
 			$result = pg_query($conn, "SELECT prod_id FROM product");
@@ -29,14 +28,15 @@
 		if(isset($_POST['submit'])){
 			$array=array();
 			$array_id=array();
-			echo $count;
+			$numOfProd = pg_query($conn, "SELECT * FROM product");
+			$count=pg_num_rows($numOfProd);
 			
 			for($i=0;$i<$count;$i++){
 				$array[$i]=$_POST["prod{$i}"];
 				$array_id[$i]=$_POST["prod_id{$i}"];
 			}
 			//execute query then close connection
-			for($i=0;$i<$count;$i++){ pg_query($conn, "UPDATE inventory SET prod_quantity='{$array[$i]}' WHERE prod_id={$array_id[$i]}"); }
+			for($i=0;$i<$count;$i++){ pg_query($conn, "UPDATE inventory SET prod_quantity='{$array[$i]}' WHERE prod_id={$array_id[$i]} AND inv_date='{$date}'"); }
 		}
 	?>
 	<body>
@@ -78,14 +78,14 @@
 								<?php //load the list of existing products
 									$i=0;
 									$result = pg_query($conn, "SELECT * FROM product");
-									$stock = pg_query($conn, "SELECT * FROM inventory");
+									$stock = pg_query($conn, "SELECT * FROM inventory WHERE inv_date='{$date}'");
 									while ($row = pg_fetch_row($result)) {
 										while($quan = pg_fetch_row($stock)){
 											if($quan[0]==$row[0]) break;
 										}
 										echo "<tr class='TDR'>";
-										echo "<td class='TDR'>{$row[0]}</td><td class='TDR'>{$row[1]}</td> <td class='TDR'><input class='deleteId' name='prod{$i}' type='text' value='{$quan[1]}'/></td>" ;
-										echo "<input type='hidden' name='prod_id{$i}' value='{$row[0]}'>";
+										echo "<td class='TDR'>{$row[0]}</td><td class='TDR'>{$row[1]}</td> <td class='TDR'><input class='deleteId' id='prod{$i}' name='prod{$i}' type='text' value='{$quan[1]}' onchange=\"isNumber('prod{$i}')\"/></td>" ;
+										echo "<input type='hidden' name='prod_id{$i}' value='{$row[0]}';>";
 										echo "</tr>";
 										$i++;
 									}
