@@ -128,3 +128,32 @@ function ValidateLogin(){
 	}
 }
 /*End of Login*/
+
+/*script for Adding Item in Cashier System*/
+function addItem(){
+		var e1 = document.getElementById('prodlist');
+		var e2 = document.getElementById('itemDiv');
+		var item = document.createElement('input');
+		var quantity = document.createElement('input');
+		var amount = document.createElement('input');
+		var tr = document.createElement('tr');
+		var td1 = document.createElement('td');
+		var td2 = document.createElement('td');
+		var td3 = document.createElement('td');
+		
+		amount.type = 'text';
+		quantity.type = 'number';
+		quantity.min = '0';
+		quantity.max = '100';
+		quantity.value = '0';
+		item.type = 'text';
+		item.value = e1.value;
+		item.disabled = 'disable';
+		td1.appendChild(item);
+		td2.appendChild(quantity);
+		td3.appendChild(amount);
+		tr.appendChild(td1);
+		tr.appendChild(td2);
+		tr.appendChild(td3);
+		e2.appendChild(tr);		
+}
