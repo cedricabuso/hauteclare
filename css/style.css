@@ -172,3 +172,9 @@ table.table{
 	font-size:15px;
 	font-weight: bold;
 }
+#chart_div{
+	text-align:center;
+	padding:0px 0px 0px 0px;
+	height: 500px;
+	width: 680px;
+}

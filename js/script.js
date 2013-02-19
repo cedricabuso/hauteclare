@@ -22,21 +22,20 @@ function imgError(source){
 	else {showErrorToast(source+" image is not found."); flag=0;}
 }
 
+/*Toast Messages*/
 function showSuccessToast(message) {
     $().toastmessage('showSuccessToast', message);
 }
-
 function showNoticeToast(message) {
 	$().toastmessage('showNoticeToast', message);
 }
-
 function showWarningToast(message) {
 	$().toastmessage('showWarningToast', message);
 }
-
 function showErrorToast(message) {
 	$().toastmessage('showErrorToast', message);
 }
+/*End of Toast*/
 
 /*script for Add Product*/
 function ValidateAddProduct(){
@@ -157,3 +156,26 @@ function addItem(){
 		tr.appendChild(td3);
 		e2.appendChild(tr);		
 }
+
+/*script for drawing charts of Income Graphs*/
+function initiateGoogle(){
+	google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+}
+function drawChart() {
+	var data = google.visualization.arrayToDataTable([
+		['Year', 'Sales', 'Expenses'],
+		['2004',  1000,      400],
+		['2005',  1170,      460],
+		['2006',  660,       1120],
+		['2007',  1030,      540]
+	]) 	;
+
+	var options = {
+		title: 'Company Performance'
+	};
+
+	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+	chart.draw(data, options);
+}
+/*End of Income Graphs*/
