@@ -161,20 +161,14 @@ table.table{
 	padding: 5px 5px 5px 5px;
 	text-align: center;
 }
-.date{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:17px;
-	font-weight: bold;
-}
 .TDR{
 	border: solid 1px #000;
 }
-.description{
-	text-align: left;
-}
-.green{
-	color: green;
-}
 .red{
 	color:red;
+}
+.viewBy{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+	font-weight: bold;
 }
