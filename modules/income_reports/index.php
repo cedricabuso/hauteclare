@@ -129,20 +129,20 @@
 								if (($_POST["year"]!=0) && ($_POST["month"]==0) &&($_POST["day"]==0)){
 									$year=$_POST["year"];
 									echo "<br/><h3>Displaying income report of $year</h3><br/>";
-									$result = pg_query($conn, "SELECT prod_id, prod_name, prod_price, quantity, cashdate, date_part('year', cashdate) FROM CASHIER WHERE date_part('year', cashdate)='$year' GROUP BY prod_id, prod_name, prod_price, quantity, cashdate, date_part('year', cashdate)");
+									$result = pg_query($conn, "SELECT prod_id, prod_name, prod_price, prod_quantity, cash_date, date_part('year', cash_date) FROM CASHIER WHERE date_part('year', cash_date)='$year' GROUP BY prod_id, prod_name, prod_price, prod_quantity, cash_date, date_part('year', cash_date)");
 								}
 								else if (($_POST["year"]!=0) && ($_POST["month"]!=0) &&($_POST["day"]==0)){
 									$year=$_POST["year"];
 									$month=$_POST["month"];
 									echo "<br/><h3>Displaying income report of $month-$year</h3><br/>";
-									$result = pg_query($conn, "SELECT prod_id, prod_name, prod_price, quantity, cashdate, date_part('year', cashdate), date_part('month',cashdate) FROM CASHIER WHERE date_part('year', cashdate)='$year' AND  date_part('month', cashdate)='$month' GROUP BY prod_id, prod_name, prod_price, quantity, cashdate, date_part('year', cashdate), date_part('month',cashdate)");
+									$result = pg_query($conn, "SELECT prod_id, prod_name, prod_price, prod_quantity, cash_date, date_part('year', cash_date), date_part('month',cash_date) FROM CASHIER WHERE date_part('year', cash_date)='$year' AND  date_part('month', cashdate)='$month' GROUP BY prod_id, prod_name, prod_price, prod_quantity, cash_date, date_part('year', cash_date), date_part('month',cash_date)");
 								}
 								else if (($_POST["year"]!=0) && ($_POST["month"]!=0) &&($_POST["day"]!=0)){
 									$year=$_POST["year"];
 									$month=$_POST["month"];
 									$day=$_POST["day"];
 									echo "<br/><h3>Displaying income report of $day-$month-$year</h3><br/>";
-									$result = pg_query($conn, "SELECT prod_id, prod_name, prod_price, quantity, cashdate, date_part('year', cashdate), date_part('month',cashdate), date_part('day',cashdate) FROM CASHIER WHERE date_part('year', cashdate)='$year' AND  date_part('month', cashdate)='$month' AND date_part('day',cashdate)='$day' GROUP BY prod_id, prod_name, prod_price, quantity, cashdate, date_part('year', cashdate), date_part('month',cashdate), date_part('day',cashdate)");
+									$result = pg_query($conn, "SELECT prod_id, prod_name, prod_price, prod_quantity, cash_date, date_part('year', cash_date), date_part('month',cash_date), date_part('day',cash_date) FROM CASHIER WHERE date_part('year', cashdate)='$year' AND  date_part('month', cash_date)='$month' AND date_part('day',cash_date)='$day' GROUP BY prod_id, prod_name, prod_price, quantity, cashdate, date_part('year', cash_date), date_part('month',cash_date), date_part('day',cash_date)");
 								}
 								
 								else{
