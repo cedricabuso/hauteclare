@@ -37,7 +37,6 @@
 						  <li><a href="../login/">Login</a></li>
 						  <li><a href="../sign_up/">Sign Up</a></li>
 						  <li><a href="../add_employee/">Add Employee</a></li>
-						  <li><a href="../edit_employee/">Edit Employee</a></li>
 						  <li><a href="../delete_employee/">Add Employee</a></li>
 						  <li><a href="../search_employee/">Search Employee</a></li>
 						  <li><a href="../view_all_employee/">View All Employee</a></li>
@@ -45,7 +44,7 @@
 						  <li><a href="../income_reports/">Income Reports</a></li>
 						  <li><a href="../inventory_system/">Inventory System</a></li>
 						  <li><a href="../add_product/">Add Product</a></li>
-						  <li><a href="../delete_product/">Delete Product</a></li> 
+						  <li><a href="../delete_product/">Delete Product</a></li>
 						</ul>
 					</div>
 					<div class="mid-right">
