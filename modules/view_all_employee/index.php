@@ -9,27 +9,10 @@
 	  <link href="../../css/jquery.toastmessage.css" rel="stylesheet" type="text/css">
 	  <link href="../../css/style.css" rel="stylesheet" type="text/css">
 	</head>
-	<?php //if submit is executed
-		if(isset($_POST['submit'])){
-			// connect
-			$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
-			if (!$conn) {
-				die("Error in connection: " . pg_last_error());
-			}
-		
-			// get values
-			$uname=$_POST["uname"];
-			$pword=md5($_POST["pword"]);
-			$unameflag=0;
-		
-			// check if username is in database
-			$user_array=pg_query("SELECT uname,pword from __user");
-			while ($row=pg_fetch_assoc($user_array)){
-				if ($row['uname']==$uname){
-					$unameflag=1;
-					$match_pw=$row['pword'];
-				}
-			}
+	<?php //connect
+		$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
+		if (!$conn) {
+			die("Error in connection: " . pg_last_error());
 		}
 	?>
 	<body>
@@ -66,39 +49,38 @@
 						</ul>
 					</div>
 					<div class="mid-right">
-						<h1 class="gap-1">Login</h1>
-						
-						<form name="login" onSubmit=" return ValidateLogin()" method="POST" action="">
-							<table class="table">
+						<h1 class="gap-1">View All Employees</h1>
+							<table class="viewAllTable">
 								<tr>
-									<td>Username</td>
-									<td><input type="text" name="uname"/></td>
+									<td class="deleteId">Image</td>
+									<td class="deleteId">Information</td>
+									<td class="deleteId">Action</td>
 								</tr>
-								<tr>
-									<td>Password</td>
-									<td><input type="password" name="pword" /></td>
-								</tr>
-								<tr>
-									<td></td>
-									<td><input type="submit" name="submit" value="Login"></td>
-								</tr>
+								<?php //load the list of existing products
+									$i=0;
+									$result = pg_query($conn, "SELECT * FROM emp");
+									while ($row = pg_fetch_row($result)) {
+										echo "<tr class='TDR'>";
+										echo "<td class='TDR'><img id='{$row[1]}' src='../../employees/$row[1].jpg' width='150' height='150' onerror='empImgError(\"$row[1]\");'/></td> <td class='TDR description'><br> <b class='green'>Emp No:</b> $row[0] <br> <b class='green'>Name:</b> $row[1] <br> <b class='green'>Sex:</b> $row[2] <br> 
+                                                                      <b class= 'green'> Address:</b> $row[3] <br> <b class= 'green'> Hire Date:</b> $row[4]</td>" ;
+										echo "<td class='TDR'>
+											  <form name='myForm{$i}' method='post' action='../edit_employee/index.php'> 
+												<input type='hidden' name='id' value='{$row[0]}'/>
+												<input type='submit' name='edit' id='submit' value='Edit'/>
+											  </form>
+											  </td>";
+                                                                    
+										echo "</tr>";
+									}
+									pg_close($conn);	//close connection
+								?>
 							</table>
-						</form>
 					</div>
 				</div>
 				<div class="footer">
 					<p class="copyright">© COPYRIGHT 2013 ALL RIGHTS RESERVED</p>
 				</div>
-				<?php if(isset($_POST['submit'])) {
-						// if username is not in database
-						if($unameflag==0) echo "<script>showErrorToast('Invalid username or password');</script>";
-						//else if username is in database check if passwords match
-						else{
-							if ($pword==$match_pw) header("Location: ../../index.html");
-							else echo "<script>showErrorToast('Invalid username or password');</script>";
-						}
-					  }
-				?>
+				<?php if(isset($_POST['submit'])) echo "<script type='text/javascript'>showSuccessToast('Successfully Saved');</script>";?>
 			</div>
 		</div>
 	</body>

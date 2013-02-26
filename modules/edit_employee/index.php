@@ -14,18 +14,19 @@
 		session_start();
 		//id submit is executed
 		if(isset($_POST['submit'])){
-			$empno = $_POST['empno'];
+                     
+			$empno = $_POST['id'];
 			$ename = $_POST['ename'];
 			$esex = $_POST['esex'];
 			$eaddress = $_POST['eaddress'];
                      $hiredate = $_POST['hiredate'];
 			//connect
 			$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
-			if (!$conn) {
+		if (!$conn) {
 				die("Error in connection: " . pg_last_error());
 			}
 			//execute query then close connection
-			pg_query($conn, "INSERT INTO emp (empnum, name, sex, address, hire_date) VALUES('{$empno}','{$ename}', '{$esex}', '{$eaddress}', '{$hiredate}')");
+			pg_query($conn, "UPDATE emp SET empnum='{$empno}', name='{$ename}', sex='{$esex}', address='{$eaddress}', hire_date='{$hiredate}' WHERE empnum={$empno}");
 			pg_close($conn);
 		}
 	?>
@@ -59,24 +60,66 @@
 						  <li><a href="../income_reports/">Income Reports</a></li>
 						  <li><a href="../inventory_system/">Inventory System</a></li>
 						  <li><a href="../add_product/">Add Product</a></li>
-						  <li><a href="../delete_product/">Delete Product</a></li>  
+						  <li><a href="../delete_product/">Delete Product</a></li>
 						</ul>
 					</div>
 					<div class="mid-right">
-						<h1 class="gap-1">Add Employee</h1>
+						<h1 class="gap-1">Edit Employee</h1>
+						
 						<form name="addEmployee" onsubmit="return ValidateAddEmployee();" method="post" action="">
+							<?php //connect
+								if(isset($_POST['edit'])){
+									$id = $_POST['id'];
+									$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
+									if (!$conn) {
+										die("Error in connection: " . pg_last_error());
+									}
+									$result = pg_query($conn, "SELECT * FROM emp WHERE empnum={$id};");
+									while ($row = pg_fetch_row($result)) {
+										$ename=$row[1];
+										$esex=$row[2];
+                                                                      $eaddress=$row[3];
+										$hiredate=$row[4];
+									}
+								}
+							?>
 							<table class="table">
 								<tr>
-									<td>Image <br ><span class="red">*File name of image should be same with product name. (E.g. Juan Dela Cruz.jpg)</span></td>
+									<td>Emp No</td>
+									<td>
+										<input type="text" disabled="disabled" value="<?php if(isset($_POST['edit'])) echo $id; ?>"/>
+										<input type="hidden" id="id" name="id" value="<?php if(isset($_POST['edit'])) echo $id; ?>"/>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td>Name</td>
+									<td><input type="text" id="ename" name="ename" onchange="isLetter('ename');" value="<?php if(isset($_POST['edit'])) echo $ename; ?>"/></td>
+								</tr>
+								<tr>
+									<td>Sex</td>
+									<td><input type="text" id="esex" name="esex" onchange="isNumber('esex');" value="<?php if(isset($_POST['edit'])) echo $esex; ?>"/></td>
+								</tr>
+								<tr>
+									<td>Address</td>
+									<td><input type="text" id="eaddress" name="eaddress" onchange="isLetter('eaddress');" value="<?php if(isset($_POST['edit'])) echo $eaddress; ?>"/></td>
+								</tr>
+                                                        
+                                                        <tr>
+									<td>Hire Date</td>
+									<td><input type="date" id="hiredate" name="hiredate" onchange="isLetter('hiredate');" value="<?php if(isset($_POST['edit'])) echo $hiredate; ?>"/></td>
+								</tr>
+								<tr>
+									<td>Image</td>
 									<td><?php //initialize phpuploader
 											$uploader=new PhpUploader();
 											$uploader->MultipleFilesUpload=false;
-											$uploader->InsertText="Upload Image (Max:10MB)";
+											$uploader->InsertText="Upload Image( Max:10MB )";
 											$uploader->MaxSizeKB=1024000;	
 											$uploader->AllowedFileExtensions="jpeg,jpg,png";
 											$uploader->SaveDirectory="../../employees/";
 											$uploader->Render();?>
-											
+											<br/>File name of image should be same with employee name. (E.g. Juan Dela Cruz.jpg)<br> Accepts <b class="red">*.jpeg, *.jpg and *.png</b> images only.
 											<script type='text/javascript'>
 												function CuteWebUI_AjaxUploader_OnTaskComplete(task){
 													showSuccessToast(task.FileName + " is uploaded!");
@@ -84,37 +127,9 @@
 											</script>
 									</td>
 								</tr>
-							<table>
-							<table class="table">
-								<tr>
-									<td>Employee No.</td>
-									<td><input type="text" id="empno" name="empno" onchange="empNoValidate('empno');"/></td>
-								</tr>
-								</tr>
-								<tr>
-									<td>Name</td>
-									<td><input type="text" id="ename" name="ename" onchange="isLetter('ename');"/></td>
-								</tr>
-                                                        <tr>
-									<td>Sex</td>
-									<td>
-										<input type="radio" id="esex" name="esex" value="Male">Male<br>
-										<input type="radio" id="esex" name="esex" value="Female">Female
-									</td>
-								</tr>
-								
-                                                        <tr>
-									<td>Address</td>
-									<td><input type="text" id="eaddress" name="eaddress"/></td>
-								</tr>
-                                                                                                   
-                                                        <tr>
-									<td>Hire Date</td>
-									<td><input type="date" id="hiredate" name="hiredate"/></td>
-								</tr>	
 								<tr>
 									<td></td>
-									<td><input type="submit" name="submit" value="Add Employee"></td>
+									<td><input type="submit" name="submit" value="Edit Employee"></td>
 								</tr>
 							</table>
 						</form>
@@ -123,7 +138,7 @@
 				<div class="footer">
 					<p class="copyright">© COPYRIGHT 2013 ALL RIGHTS RESERVED</p>
 				</div>
-				<?php if(isset($_POST['submit'])) echo "<script type='text/javascript'>showSuccessToast('Successfully Saved');</script>";?>
+				<?php if(isset($_POST['submit'])) echo "<script type='text/javascript'>showSuccessToast('Successfully Updated');</script>";?>
 			</div>
 		</div>
 	</body>

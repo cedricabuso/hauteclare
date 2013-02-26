@@ -9,27 +9,10 @@
 	  <link href="../../css/jquery.toastmessage.css" rel="stylesheet" type="text/css">
 	  <link href="../../css/style.css" rel="stylesheet" type="text/css">
 	</head>
-	<?php //if submit is executed
-		if(isset($_POST['submit'])){
-			// connect
-			$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
-			if (!$conn) {
-				die("Error in connection: " . pg_last_error());
-			}
-		
-			// get values
-			$uname=$_POST["uname"];
-			$pword=md5($_POST["pword"]);
-			$unameflag=0;
-		
-			// check if username is in database
-			$user_array=pg_query("SELECT uname,pword from __user");
-			while ($row=pg_fetch_assoc($user_array)){
-				if ($row['uname']==$uname){
-					$unameflag=1;
-					$match_pw=$row['pword'];
-				}
-			}
+	<?php //connect
+		$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
+		if (!$conn) {
+			die("Error in connection: " . pg_last_error());
 		}
 	?>
 	<body>
@@ -62,43 +45,46 @@
 						  <li><a href="../income_reports/">Income Reports</a></li>
 						  <li><a href="../inventory_system/">Inventory System</a></li>
 						  <li><a href="../add_product/">Add Product</a></li>
-						  <li><a href="../delete_product/">Delete Product</a></li>
+						  <li><a href="../delete_product/">Delete Product</a></li> 
 						</ul>
 					</div>
 					<div class="mid-right">
-						<h1 class="gap-1">Login</h1>
-						
-						<form name="login" onSubmit=" return ValidateLogin()" method="POST" action="">
-							<table class="table">
-								<tr>
-									<td>Username</td>
-									<td><input type="text" name="uname"/></td>
-								</tr>
-								<tr>
-									<td>Password</td>
-									<td><input type="password" name="pword" /></td>
-								</tr>
-								<tr>
-									<td></td>
-									<td><input type="submit" name="submit" value="Login"></td>
-								</tr>
-							</table>
-						</form>
+						<h1 class="gap-1">Search Employee</h1>
+                        <form name="searchEmp" onsubmit="return ValidateAddEmployee();" method="post" action="">						
+							<tr>
+								<td><b>Emp No</b></td>
+								<td><input type="text" id="empno" name="empno" onchange="isNumber('empnum');"/></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><input type="submit" name="submit" value="Search"></td>						   
+							</tr>
+                   </form>
+              <?php //load the list of existing products
+				if(isset($_POST['submit'])){                     
+					$empno = $_POST['empno'];
+					$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
+							 if (!$conn) {
+						die("Error in connection: " . pg_last_error());
+					}
+					//execute query then close connection
+                    $i=0;
+                    $result = pg_query($conn, "SELECT * FROM emp WHERE empnum={$empno}");
+                    while ($row = pg_fetch_row($result)) {
+                           echo "<tr class='TDR'>";
+                           echo "<td class='TDR'><img id='{$row[1]}' src='../../employees/$row[1].jpg' width='150' height='150' onerror='imgError(\"$row[1]\");'/></td> <td class='TDR description'><br> <b class='green'>Emp No:</b> $row[0] <br> <b class='green'>Name:</b> $row[1] <br> <b class='green'>Sex:</b> $row[2] <br> 
+                           <b class= 'green'> Address:</b> $row[3] <br> <b class= 'green'> Hire Date:</b> $row[4]</td>" ;
+                           echo "</tr>";
+                    }
+                    pg_close($conn);	//close connection
+                    echo "<b>Employee does not exist.</b>";
+				}
+       ?>
 					</div>
 				</div>
 				<div class="footer">
 					<p class="copyright">© COPYRIGHT 2013 ALL RIGHTS RESERVED</p>
 				</div>
-				<?php if(isset($_POST['submit'])) {
-						// if username is not in database
-						if($unameflag==0) echo "<script>showErrorToast('Invalid username or password');</script>";
-						//else if username is in database check if passwords match
-						else{
-							if ($pword==$match_pw) header("Location: ../../index.html");
-							else echo "<script>showErrorToast('Invalid username or password');</script>";
-						}
-					  }
-				?>
 			</div>
 		</div>
 	</body>

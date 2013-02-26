@@ -16,11 +16,17 @@ function setPostValue(id){
 	return true;
 }
 
+/*Image Processing*/
 flag=0;
 function imgError(source){
 	if(flag==0){ document.getElementById(source).src="../../products/"+source+".png"; flag++;}
 	else {showErrorToast(source+" image is not found."); flag=0;}
 }
+function empImgError(source){
+	if(flag==0){ document.getElementById(source).src="../../employees/"+source+".png"; flag++;}
+	else {showErrorToast(source+" image is not found."); flag=0;}
+}
+/*End of Image Processing*/
 
 /*Toast Messages*/
 function showSuccessToast(message) {
@@ -55,6 +61,31 @@ function ValidateAddProduct(){
 	}
 }
 /*End of Add Product*/
+
+/*script for Add Employee*/
+function empNoValidate(id){
+	var regexp = /^\d{6}$/;
+	input=document.getElementById(id).value;
+	if(!regexp.test(input)) showNoticeToast("Input should be 6 numerical digits.");
+}
+function ValidateAddEmployee(){
+	var regexp = /^\d{6}$/;
+	var form=document.addEmployee;
+	alertmess="";
+	
+	if (form.empno.value==""||form.empno.value==null||(!regexp.test(form.empno.value))) alertmess+="Please enter a valid employee number.<br>";
+	if (form.ename.value==""||form.ename.value==null) alertmess+="Please enter name of employee.<br>";
+	if (form.eaddress.value==""||form.eaddress.value==null) alertmess+="Please enter address of employee.<br>";
+	if (form.hiredate.value==""||form.hiredate.value==null) alertmess+="Please enter hire date of employee.<br>";
+	if (!form.esex[0].checked && !form.esex[1].checked) alertmess+="Please select sex.";
+	
+	if (alertmess==""){}
+	else{
+		showWarningToast(alertmess);
+		return false;
+	}
+}
+/*End of Add Employee*/
 
 /*script for Sign Up*/
 function pwordMatch(){

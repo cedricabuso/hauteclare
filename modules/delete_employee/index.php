@@ -9,27 +9,18 @@
 	  <link href="../../css/jquery.toastmessage.css" rel="stylesheet" type="text/css">
 	  <link href="../../css/style.css" rel="stylesheet" type="text/css">
 	</head>
-	<?php //if submit is executed
+	<?php //connect
+		$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
+		if (!$conn) {
+			die("Error in connection: " . pg_last_error());
+		}
+		
+		//if submit is executed
 		if(isset($_POST['submit'])){
-			// connect
-			$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
-			if (!$conn) {
-				die("Error in connection: " . pg_last_error());
-			}
-		
-			// get values
-			$uname=$_POST["uname"];
-			$pword=md5($_POST["pword"]);
-			$unameflag=0;
-		
-			// check if username is in database
-			$user_array=pg_query("SELECT uname,pword from __user");
-			while ($row=pg_fetch_assoc($user_array)){
-				if ($row['uname']==$uname){
-					$unameflag=1;
-					$match_pw=$row['pword'];
-				}
-			}
+			$empno = $_POST['id'];
+			echo $empno;
+			//execute query
+			pg_query($conn, "DELETE FROM emp WHERE empnum={$empno}");
 		}
 	?>
 	<body>
@@ -66,39 +57,37 @@
 						</ul>
 					</div>
 					<div class="mid-right">
-						<h1 class="gap-1">Login</h1>
+						<h1 class="gap-1">Delete Employee</h1>
 						
-						<form name="login" onSubmit=" return ValidateLogin()" method="POST" action="">
-							<table class="table">
+							<table class="deleteTable">
 								<tr>
-									<td>Username</td>
-									<td><input type="text" name="uname"/></td>
+									<td class="deleteId">Emp No</td>
+									<td class="deleteId">Name</td>
+									<td class="deleteId">Action</td>
 								</tr>
-								<tr>
-									<td>Password</td>
-									<td><input type="password" name="pword" /></td>
-								</tr>
-								<tr>
-									<td></td>
-									<td><input type="submit" name="submit" value="Login"></td>
-								</tr>
+								<?php //load the list of existing products
+									$i=0;
+									$result = pg_query($conn, "SELECT * FROM emp");
+									while ($row = pg_fetch_row($result)) {
+										echo "<tr>";
+										echo "<td class='deleteId'>$row[0]</td> <td>$row[1]</td>" ;
+										echo "<td>
+											  <form name='myForm{$i}' method='post' action=''> 
+												<input type='hidden' name='id' value='{$row[0]}'/>
+												<input type='submit' name='submit' id='submit' value='Delete'/>
+											  </form>
+											  </td>";
+										echo "</tr>";
+									}
+									pg_close($conn);	//close connection
+								?>
 							</table>
-						</form>
 					</div>
 				</div>
 				<div class="footer">
 					<p class="copyright">© COPYRIGHT 2013 ALL RIGHTS RESERVED</p>
 				</div>
-				<?php if(isset($_POST['submit'])) {
-						// if username is not in database
-						if($unameflag==0) echo "<script>showErrorToast('Invalid username or password');</script>";
-						//else if username is in database check if passwords match
-						else{
-							if ($pword==$match_pw) header("Location: ../../index.html");
-							else echo "<script>showErrorToast('Invalid username or password');</script>";
-						}
-					  }
-				?>
+				<?php if(isset($_POST['submit'])) echo "<script type='text/javascript'>showSuccessToast('Successfully Saved');</script>";?>
 			</div>
 		</div>
 	</body>
