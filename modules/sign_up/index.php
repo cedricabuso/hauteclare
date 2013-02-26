@@ -99,6 +99,7 @@
 						<ul class="left-nav">
 						  <li><a href="../login/">Login</a></li>
 						  <li><a href="../sign_up/">Sign Up</a></li>
+						  <li><a href="../add_employee/">Add Employee</a></li>
 						  <li><a href="../income_graphs/">Income Graphs</a></li>
 						  <li><a href="../income_reports/">Income Reports</a></li>
 						  <li><a href="../inventory_system/">Inventory System</a></li>
