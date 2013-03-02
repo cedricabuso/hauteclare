@@ -177,6 +177,17 @@ table.table{
 	font-size:15px;
 	font-weight: bold;
 }
+.center {
+	text-align:center;
+	width: 60px;
+}
+.centerBorder0 {
+	text-align: center;
+}
+.borderLess{
+	border: 0;
+	text-align: center;
+}
 #chart_div{
 	text-align:center;
 	padding:0px 0px 0px 0px;
