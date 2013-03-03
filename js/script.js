@@ -187,26 +187,3 @@ function addItem(){
 		tr.appendChild(td3);
 		e2.appendChild(tr);		
 }
-
-/*script for drawing charts of Income Graphs*/
-function initiateGoogle(){
-	google.load("visualization", "1", {packages:["corechart"]});
-    google.setOnLoadCallback(drawChart);
-}
-function drawChart() {
-	var data = google.visualization.arrayToDataTable([
-		['Month', 'Sales'],
-		['November',  1000],
-		['December',  1170],
-		['January',  660],
-		['February',  1030]
-	]) 	;
-
-	var options = {
-		title: 'Company Performance'
-	};
-
-	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-	chart.draw(data, options);
-}
-/*End of Income Graphs*/

@@ -19,32 +19,32 @@
 		<div class="wrapper">
 			<div class="main">
 				<div class="header">
-					<div class="banner-1">&nbsp;</div>
+					Ahl's Cakes
 				</div>
 				
 				<div class="mid">
 					<div class="mid-left">
 						<h2 class="gap-2">Menu</h2>
-						<ul class="left-nav">
-						  <li><a href="../../index.html">Home</a></li>
+						<ul class="left-nav bmenu">
+						  <li class="top"><a href="../../index.html">Home</a></li>
 						  <li><a href="../view_all_products/">View Products</a></li>
 						  <li><a href="#">Order Online</a></li>
 						  <li><a href="#">Contact</a></li>
-						  <li><a href="#">About Us</a></li>
+						  <li class="bottom"><a href="#">About Us</a></li>
 						</ul>
 						<h2 class="gap-2">Employee</h2>
-						<ul class="left-nav">
-						  <li><a href="../login/">Login</a></li>
+						<ul class="left-nav bmenu">
+						  <li class="top"><a href="../login/">Login</a></li>
 						  <li><a href="../sign_up/">Sign Up</a></li>
 						  <li><a href="../add_employee/">Add Employee</a></li>
-						  <li><a href="../delete_employee/">Add Employee</a></li>
+						  <li><a href="../delete_employee/">Delete Employee</a></li>
 						  <li><a href="../search_employee/">Search Employee</a></li>
 						  <li><a href="../view_all_employee/">View All Employee</a></li>
 						  <li><a href="../income_graphs/">Income Graphs</a></li>
 						  <li><a href="../income_reports/">Income Reports</a></li>
 						  <li><a href="../inventory_system/">Inventory System</a></li>
 						  <li><a href="../add_product/">Add Product</a></li>
-						  <li><a href="../delete_product/">Delete Product</a></li>
+						  <li class="bottom"><a href="../delete_product/">Delete Product</a></li>
 						</ul>
 					</div>
 					<div class="mid-right">
@@ -64,7 +64,7 @@
 								<option value="2009">2009</option>
 								<option value="2008">2008</option>
 								<option value="2007">2007</option>
-								<option value="20006">2006</option>
+								<option value="2006">2006</option>
 								</select>
 							</td>
 							<td>Month</td>
@@ -170,7 +170,7 @@
 										echo "<tr class='TDR'>";
 										echo "<td class='TDR'>$row[1]</td> <td class='TDR'>$row[2]</td> <td class='TDR'>$row[3]</td> <td class='TDR'>$row[4]</td><td class='TDR'>$income</td>" ;
 										echo "</tr>";
-									}
+								}
 									echo "<tr>";
 									echo "<td colspan=4>";
 									echo "<td>$total</td>";	
