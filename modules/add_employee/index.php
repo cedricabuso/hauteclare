@@ -37,23 +37,40 @@
 					<div class="mid-left">
 						<h2 class="gap-2">Menu</h2>
 						<ul class="left-nav">
-						  <li><a href="../../index.html">Home</a></li>
-						  <li><a href="../view_all_products/">View Products</a></li>
+						  <li><a href="index.html">Home</a></li>
+						  <li><a href="modules/view_all_products/">View Products</a></li>
 						  <li><a href="#">Order Online</a></li>
 						  <li><a href="#">Contact</a></li>
 						  <li><a href="#">About Us</a></li>
 						</ul>
-						<h2 class="gap-2">Employee</h2>
-						<ul class="left-nav">
-						  <li><a href="../login/">Login</a></li>
-						  <li><a href="../sign_up/">Sign Up</a></li>
-						  <li><a href="../add_employee/">Add Employee</a></li>
-						  <li><a href="../income_graphs/">Income Graphs</a></li>
-						  <li><a href="../income_reports/">Income Reports</a></li>
-						  <li><a href="../inventory_system/">Inventory System</a></li>
-						  <li><a href="../add_product/">Add Product</a></li>
-						  <li><a href="../delete_product/">Delete Product</a></li>
-						</ul>
+						<?php
+							if(!isset($_SESSION["role"])){
+								echo "<h2 class=\"gap-2\">Login</h2>
+									<ul class=\"left-nav\">
+									<li>";
+								include("../login/index.php");
+								echo "<li><a href=\"modules/sign_up/\">Sign Up</a></li>";
+								echo "</li>
+									</ul>";
+							}
+							else{
+								echo "<h2 class=\"gap-2\">Employee</h2>
+								<ul class=\"left-nav\">";
+								if($_SESSION["role"]=="owner"){
+									echo "<li><a href=\"modules/add_employee/\">Add Employee</a></li>";
+								}
+								if($_SESSION["role"]=="employee" || $_SESSION["role"]=="owner"){
+										echo "<li><a href=\"modules/income_graphs/\">Income Graphs</a></li>
+										  <li><a href=\"modules/income_reports/\">Income Reports</a></li>
+										  <li><a href=\"modules/inventory_system/\">Inventory System</a></li>
+										  <li><a href=\"modules/add_product\">Add Product</a></li>
+										  <li><a href=\"modules/delete_product\">Delete Product</a></li>";
+								}
+								echo "</ul>";
+								echo "<ul class=\"left-nav\"><li><a href=\"modules/logout/index.php\">Logout</a></li></ul>";
+							}
+						?>
+
 					</div>
 					<div class="mid-right">
 						<h1 class="gap-1">Add Employee</h1>
