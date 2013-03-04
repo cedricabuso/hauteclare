@@ -14,17 +14,19 @@
 		session_start();
 		//id submit is executed
 		if(isset($_POST['submit'])){
-			$id = $_POST['id'];
-			$name = $_POST['name'];
-			$description = $_POST['desc'];
-			$price = $_POST['price'];
+                     
+			$empno = $_POST['id'];
+			$ename = $_POST['ename'];
+			$esex = $_POST['esex'];
+			$eaddress = $_POST['eaddress'];
+                     $hiredate = $_POST['hiredate'];
 			//connect
 			$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
-			if (!$conn) {
+		if (!$conn) {
 				die("Error in connection: " . pg_last_error());
 			}
 			//execute query then close connection
-			pg_query($conn, "UPDATE product SET prod_name='{$name}', prod_desc='{$description}', prod_img='{$name}', prod_price={$price} WHERE prod_id={$id}");
+			pg_query($conn, "UPDATE emp SET empnum='{$empno}', name='{$ename}', sex='{$esex}', address='{$eaddress}', hire_date='{$hiredate}' WHERE empnum={$empno}");
 			pg_close($conn);
 		}
 	?>
@@ -38,49 +40,13 @@
 				<div class="mid">
 					<div class="mid-left">
 						<h2 class="gap-2">Menu</h2>
-<<<<<<< HEAD
-						<ul class="left-nav">
-						  <li><a href="index.html">Home</a></li>
-						  <li><a href="modules/view_all_products/">View Products</a></li>
-=======
 						<ul class="left-nav bmenu">
 						  <li class="top"><a href="../../index.html">Home</a></li>
 						  <li><a href="../view_all_products/">View Products</a></li>
->>>>>>> origin/v1.03
 						  <li><a href="#">Order Online</a></li>
 						  <li><a href="#">Contact</a></li>
 						  <li class="bottom"><a href="#">About Us</a></li>
 						</ul>
-<<<<<<< HEAD
-						<?php
-							if(!isset($_SESSION["role"])){
-								echo "<h2 class=\"gap-2\">Login</h2>
-									<ul class=\"left-nav\">
-									<li>";
-								include("../login/index.php");
-								echo "<li><a href=\"modules/sign_up/\">Sign Up</a></li>";
-								echo "</li>
-									</ul>";
-							}
-							else{
-								echo "<h2 class=\"gap-2\">Employee</h2>
-								<ul class=\"left-nav\">";
-								if($_SESSION["role"]=="owner"){
-									echo "<li><a href=\"modules/add_employee/\">Add Employee</a></li>";
-								}
-								if($_SESSION["role"]=="employee" || $_SESSION["role"]=="owner"){
-										echo "<li><a href=\"modules/income_graphs/\">Income Graphs</a></li>
-										  <li><a href=\"modules/income_reports/\">Income Reports</a></li>
-										  <li><a href=\"modules/inventory_system/\">Inventory System</a></li>
-										  <li><a href=\"modules/add_product\">Add Product</a></li>
-										  <li><a href=\"modules/delete_product\">Delete Product</a></li>";
-								}
-								echo "</ul>";
-								echo "<ul class=\"left-nav\"><li><a href=\"modules/logout/index.php\">Logout</a></li></ul>";
-							}
-						?>
-
-=======
 						<h2 class="gap-2">Employee</h2>
 						<ul class="left-nav bmenu">
 						  <li class="top"><a href="../login/">Login</a></li>
@@ -95,12 +61,11 @@
 						  <li><a href="../add_product/">Add Product</a></li>
 						  <li class="bottom"><a href="../delete_product/">Delete Product</a></li>
 						</ul>
->>>>>>> origin/v1.03
 					</div>
 					<div class="mid-right">
-						<h1 class="gap-1">Edit Product</h1>
+						<h1 class="gap-1">Edit Employee</h1>
 						
-						<form name="addProduct" onsubmit="return ValidateAddProduct();" method="post" action="">
+						<form name="addEmployee" onsubmit="return ValidateAddEmployee();" method="post" action="">
 							<?php //connect
 								if(isset($_POST['edit'])){
 									$id = $_POST['id'];
@@ -108,17 +73,18 @@
 									if (!$conn) {
 										die("Error in connection: " . pg_last_error());
 									}
-									$result = pg_query($conn, "SELECT * FROM product WHERE prod_id={$id};");
+									$result = pg_query($conn, "SELECT * FROM emp WHERE empnum={$id};");
 									while ($row = pg_fetch_row($result)) {
-										$name=$row[1];
-										$desc=$row[2];
-										$price=$row[4];
+										$ename=$row[1];
+										$esex=$row[2];
+                                                                      $eaddress=$row[3];
+										$hiredate=$row[4];
 									}
 								}
 							?>
 							<table class="table">
 								<tr>
-									<td>ID</td>
+									<td>Emp No</td>
 									<td>
 										<input type="text" disabled="disabled" value="<?php if(isset($_POST['edit'])) echo $id; ?>"/>
 										<input type="hidden" id="id" name="id" value="<?php if(isset($_POST['edit'])) echo $id; ?>"/>
@@ -127,15 +93,20 @@
 								</tr>
 								<tr>
 									<td>Name</td>
-									<td><input type="text" id="name" name="name" onchange="isLetter('name');" value="<?php if(isset($_POST['edit'])) echo $name; ?>"/></td>
+									<td><input type="text" id="ename" name="ename" onchange="isLetter('ename');" value="<?php if(isset($_POST['edit'])) echo $ename; ?>"/></td>
 								</tr>
 								<tr>
-									<td>Price</td>
-									<td><input type="text" id="price" name="price" onchange="isNumber('price');" value="<?php if(isset($_POST['edit'])) echo $price; ?>"/></td>
+									<td>Sex</td>
+									<td><input type="text" id="esex" name="esex" onchange="isNumber('esex');" value="<?php if(isset($_POST['edit'])) echo $esex; ?>"/></td>
 								</tr>
 								<tr>
-									<td>Description</td>
-									<td><textarea name="desc" id="desc" rows="5" cols="30"><?php if(isset($_POST['edit'])) echo $desc; ?></textarea></td>
+									<td>Address</td>
+									<td><input type="text" id="eaddress" name="eaddress" onchange="isLetter('eaddress');" value="<?php if(isset($_POST['edit'])) echo $eaddress; ?>"/></td>
+								</tr>
+                                                        
+                                                        <tr>
+									<td>Hire Date</td>
+									<td><input type="date" id="hiredate" name="hiredate" onchange="isLetter('hiredate');" value="<?php if(isset($_POST['edit'])) echo $hiredate; ?>"/></td>
 								</tr>
 								<tr>
 									<td>Image</td>
@@ -145,9 +116,9 @@
 											$uploader->InsertText="Upload Image( Max:10MB )";
 											$uploader->MaxSizeKB=1024000;	
 											$uploader->AllowedFileExtensions="jpeg,jpg,png";
-											$uploader->SaveDirectory="../../products/";
+											$uploader->SaveDirectory="../../employees/";
 											$uploader->Render();?>
-											<br/>File name of image should be same with product name. (E.g. Better Than Sex Cake.jpg)<br> Accepts <b class="red">*.jpeg, *.jpg and *.png</b> images only.
+											<br/>File name of image should be same with employee name. (E.g. Juan Dela Cruz.jpg)<br> Accepts <b class="red">*.jpeg, *.jpg and *.png</b> images only.
 											<script type='text/javascript'>
 												function CuteWebUI_AjaxUploader_OnTaskComplete(task){
 													showSuccessToast(task.FileName + " is uploaded!");
@@ -157,7 +128,7 @@
 								</tr>
 								<tr>
 									<td></td>
-									<td><input type="submit" name="submit" value="Edit Product"></td>
+									<td><input type="submit" name="submit" value="Edit Employee"></td>
 								</tr>
 							</table>
 						</form>

@@ -1,7 +1,7 @@
 CREATE TABLE emp(
 	empnum int PRIMARY KEY,
 	name varchar(80),
-	sex varchar(2),
+	sex varchar(10),
 	address varchar(80),
 	hire_date date
 );
