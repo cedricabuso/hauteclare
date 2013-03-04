@@ -161,6 +161,11 @@ table.table{
 	padding: 5px 5px 5px 5px;
 	text-align: center;
 }
+.bestsellers{
+	text-align: center;
+	font-weight:bold;
+	padding-left:50px;
+}
 .TDR{
 	border: solid 1px #000;
 }
@@ -172,9 +177,43 @@ table.table{
 	font-size:15px;
 	font-weight: bold;
 }
+.center {
+	text-align:center;
+	width: 60px;
+}
+.centerBorder0 {
+	text-align: center;
+}
+.borderLess{
+	border: 0;
+	text-align: center;
+}
 #chart_div{
 	text-align:center;
 	padding:0px 0px 0px 0px;
 	height: 500px;
 	width: 680px;
+}
+
+ul{border:0; margin:0; padding:0}
+#pagination  li{
+border:0; margin:0; padding:0;
+font-size:15px;
+list-style:none;
+display:in
+}
+#pagination a{
+border:solid 1px #DDDDDD;
+margin-right:2px;
+}
+#pagination a:link,
+#pagination a:visited {
+color:#0063e3;
+display:block;
+float:left;
+padding:3px 6px;
+text-decoration:none;
+}
+#pagination a:hover{
+border:solid 1px #666666;
 }

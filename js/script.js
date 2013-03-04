@@ -159,33 +159,64 @@ function ValidateLogin(){
 }
 /*End of Login*/
 
-/*script for Adding Item in Cashier System*/
-function addItem(){
-		var e1 = document.getElementById('prodlist');
-		var e2 = document.getElementById('itemDiv');
-		var item = document.createElement('input');
-		var quantity = document.createElement('input');
-		var amount = document.createElement('input');
-		var tr = document.createElement('tr');
-		var td1 = document.createElement('td');
-		var td2 = document.createElement('td');
-		var td3 = document.createElement('td');
+function addProd(prodId,prodName,quantity,prodPrice){
 		
-		amount.type = 'text';
-		quantity.type = 'number';
-		quantity.min = '0';
-		quantity.max = '100';
-		quantity.value = '0';
-		item.type = 'text';
-		item.value = e1.value;
-		item.disabled = 'disable';
-		td1.appendChild(item);
-		td2.appendChild(quantity);
-		td3.appendChild(amount);
-		tr.appendChild(td1);
-		tr.appendChild(td2);
-		tr.appendChild(td3);
-		e2.appendChild(tr);		
+		if(quantity.value == 0) alert("Cannot add 0 "+prodName);
+		else{
+			var a = confirm("Add "+quantity.value+" piece(s) of "+prodName+"?");
+			if(a == true){
+				var tr = document.createElement("tr");
+				
+				for(var i=0; i<5; i++){
+					var input = document.createElement("input");
+					var td = document.createElement("td");
+					
+					input.type = "text";
+					input.className = "center";
+					input.readOnly = true;
+					
+					if(i==0){
+						input.type = "hidden";
+						input.name = "prodPrice[]";
+						input.value = prodPrice;
+						document.getElementById("cashierForm").appendChild(input);
+					}
+					
+					else{
+					
+						if(i==1){
+							input.name = "prodId[]";
+							input.value = prodId;
+							td.appendChild(input);
+						}
+						
+						else if(i==2){
+							input.name = "prodName[]";
+							input.className = "centerBorder0";
+							input.value = prodName;
+							td.appendChild(input);
+						}
+						
+						else if(i==3){
+							input.name = "quantity[]";
+							input.value = quantity.value;
+							quantity.max = parseInt(quantity.max)-parseInt(quantity.value);
+							td.appendChild(input);
+						}
+						
+						else if(i==4){
+							input.value = parseInt(prodPrice)*parseInt(quantity.value);
+							document.getElementById("totalPayment").value = parseInt(document.getElementById("totalPayment").value)+parseInt(input.value);
+							td.appendChild(input);
+						}
+					
+						tr.appendChild(td);
+					}
+				}
+				
+				document.getElementById("toBuy").appendChild(tr);
+			}
+		}
 }
 
 /*script for drawing charts of Income Graphs*/

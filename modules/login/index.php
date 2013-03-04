@@ -23,16 +23,18 @@
 			$unameflag=0;
 		
 			// check if username is in database
-			$user_array=pg_query("SELECT uname,pword from __user");
+			$user_array=pg_query("SELECT uname,pword,user_role from __user");
 			while ($row=pg_fetch_assoc($user_array)){
 				if ($row['uname']==$uname){
 					$unameflag=1;
 					$match_pw=$row['pword'];
+					$_SESSION["role"]=$row['user_role'];
 				}
 			}
 		}
 	?>
 	<body>
+<<<<<<< HEAD
 		<div class="wrapper">
 			<div class="main">
 				<div class="header">
@@ -100,5 +102,33 @@
 				?>
 			</div>
 		</div>
+=======
+		<form name="login" onSubmit=" return ValidateLogin()" method="POST" action="">
+			<table class="table">
+				<tr>
+					<td>Username</td>
+					<td><input type="text" name="uname" size=15/></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type="password" name="pword" size=15/></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" name="submit" value="Login"></td>
+				</tr>
+			</table>
+		</form>
+		<?php if(isset($_POST['submit'])) {
+				// if username is not in database
+				if($unameflag==0) echo "<script>showErrorToast('Invalid username or password');</script>";
+				//else if username is in database check if passwords match
+				else{
+					if ($pword==$match_pw) header("Location: index.php");
+					else echo "<script>showErrorToast('Invalid username or password');</script>";
+				}
+			  }
+		?>
+>>>>>>> origin/master
 	</body>
 </html>
