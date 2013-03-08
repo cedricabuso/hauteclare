@@ -3,6 +3,9 @@
 	<head>
 	  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	  <title>Ahl's Cake</title>
+	  <script type="text/javascript" src="js/script.js"></script>
+	  <script type="text/javascript" src="js/jquery.min.js"></script>
+	  <script src="js/jquery.toastmessage.js" type="text/javascript"></script>
 	  <link href="css/jquery.toastmessage.css" rel="stylesheet" type="text/css">
 	  <link href="css/style.css" rel="stylesheet" type="text/css">
 	</head>
@@ -10,45 +13,53 @@
 		<div class="wrapper">
 			<div class="main">
 				<div class="header">
-					<div class="banner-1">&nbsp;</div>
+					Ahl's Cakes
 				</div>
-				
+
 				<div class="mid">
 					<div class="mid-left">
-						<h2 class="gap-2">Menu</h2>
-						<ul class="left-nav">
-						  <li><a href="index.html">Home</a></li>
-						  <li><a href="modules/view_all_products/">View Products</a></li>
+						<h2 class="gap-2">MENU</h2>
+						<ul class="left-nav bmenu">
+						  <li class="top"><a href="">Home</a></li>
+						  <li><a href="modules/customer_view_products/">View Products</a></li>
 						  <li><a href="#">Order Online</a></li>
+						  <li><a href="modules/comments/">Comment</a></li>
 						  <li><a href="#">Contact</a></li>
-						  <li><a href="#">About Us</a></li>
+						  <li class="bottom"><a href="#">About Us</a></li>
 						</ul>
 						<?php
 							session_start();
+							$top=0;
 							if(!isset($_SESSION["role"])){
-								echo "<h2 class=\"gap-2\">Login</h2>
-									<ul class=\"left-nav\">
-									<li>";
+								echo "<h2 class=\"gap-2\">LOGIN</h2>
+									<ul class=\"left-nav bmenu\">
+									<li class='login top'>";
 								include("modules/login/index.php");
-								echo "<li><a href=\"modules/sign_up/\">Sign Up</a></li>";
+								echo "<li class='bottom'><a href=\"modules/sign_up/\">Sign Up</a></li>";
 								echo "</li>
 									</ul>";
 							}
 							else{
-								echo "<h2 class=\"gap-2\">Employee</h2>
-								<ul class=\"left-nav\">";
+								$role=strtoupper($_SESSION["role"]); 
+								echo "<h2 class=\"gap-2\">{$role}</h2>
+								<ul class=\"left-nav bmenu\">";
 								if($_SESSION["role"]=="owner"){
-									echo "<li><a href=\"modules/add_employee/\">Add Employee</a></li>";
+									echo "<li class='top'><a href=\"modules/add_employee/\">Add Employee</a></li>
+										  <li><a href='modules/delete_employee/'>Delete Employee</a></li>
+										  <li><a href='modules/search_employee/'>Search Employee</a></li>
+										  <li><a href='modules/view_all_employee/'>View All Employee</a></li>";
+									$top=1;
 								}
 								if($_SESSION["role"]=="employee" || $_SESSION["role"]=="owner"){
-										echo "<li><a href=\"modules/income_graphs/\">Income Graphs</a></li>
-										  <li><a href=\"modules/income_reports/\">Income Reports</a></li>
-										  <li><a href=\"modules/inventory_system/\">Inventory System</a></li>
-										  <li><a href=\"modules/add_product\">Add Product</a></li>
-										  <li><a href=\"modules/delete_product\">Delete Product</a></li>";
+										if($top==1) echo "<li><a href='modules/cashier_system/'>Cashier System</a></li>";
+										else echo "<li class='top'><a href='modules/cashier_system/'>Cashier System</a></li>";
+										echo "<li><a href='modules/inventory_system/'>Inventory System</a></li>
+											  <li><a href='modules/income_reports/'>Income Reports</a></li>
+											  <li><a href='modules/income_graphs/'>Income Graphs</a></li>
+											  <li><a href='modules/add_product/'>Add Product</a></li>
+											  <li><a href='modules/delete_product/'>Delete Product</a></li>
+											  <li class='bottom'><a href=\"modules/logout/index.php\">Logout</a></li>";
 								}
-								echo "</ul>";
-								echo "<ul class=\"left-nav\"><li><a href=\"modules/logout/index.php\">Logout</a></li></ul>";
 							}
 						?>
 					</div>
@@ -91,7 +102,4 @@
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript" src="js/script.js"></script>
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script src="js/jquery.toastmessage.js" type="text/javascript"></script>
 </html>

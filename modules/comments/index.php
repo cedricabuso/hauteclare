@@ -15,8 +15,23 @@
 			die("Error in connection: " . pg_last_error());
 		}
 		
-		$year = date("Y");
-		$result = pg_query($conn, "SELECT SUM(prod_price*prod_quantity), date_part('month',cash_date) FROM cashier WHERE date_part('year',cash_date)='{$year}' GROUP BY date_part('month',cash_date) ORDER BY date_part('month',cash_date)");
+		//id submit is executed
+		if(isset($_POST['submit'])){
+			//$comment_id = $_POST['comment_id'];
+			$comment_name = $_POST['comment_name'];
+			$comment_email = $_POST['comment_email'];
+            $comment_text = $_POST['comment_text'];
+            $time= date('l jS \of F Y h:i:s A');
+                 
+			//connect
+			$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
+			if (!$conn) {
+				die("Error in connection: " . pg_last_error());
+			}
+			//execute query then close connection
+			pg_query($conn, "INSERT INTO comments (comment_name, comment_email, comment_text, comment_date) VALUES('{$comment_name}', '{$comment_email}', '{$comment_text}', '{$time}')");
+			pg_close($conn);
+		}
 	?>
 	<body>
 		<div class="wrapper">
@@ -73,57 +88,49 @@
 						?>
 					</div>
 					<div class="mid-right">
-						<h1 class="gap-1">Income Graphs</h1>
-						<div id="chart_div"></div>
+						<h1 class="gap-1">Leave a comment</h1>
+						<form name="addComment" onsubmit="return ValidateAddComment();" method="post" action="">
+							<table class="table">
+								<tr>
+									<td>Name</td>
+									<td><input type="text" id="comment_name" name="comment_name" onchange="isLetter('name');"/></td>
+								</tr>
+                                <tr>
+									<td>E-mail(optional)</td>
+									<td><input type="text" id="comment_email" name="comment_email" onchange="isLetter('name');"/></td>
+								</tr>
+
+									<td>Comment</td>
+									<td><textarea name="comment_text" id="comment_text" rows="5" cols="35" placeholder="Add your comment/suggestion here ... "></textarea></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td><input type="submit" name="submit" value="Add Comment"></td>
+								</tr>
+							</table>
+							<br>
+                            <h1 class="gap-1">View All Comments</h1>
+							<table class="viewAllComments">								
+								<?php //load the list of existing comments
+									$i=0;
+                                    $conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
+									$result = pg_query($conn, "SELECT * FROM comments ORDER BY comment_date DESC");
+									while ($row = pg_fetch_row($result)) {
+										echo "<tr class='TDR'>";
+										echo "<td class='TDR'><b class='green'>Name:</b> $row[0] <br> <b class='green'>Email:</b> $row[1] <br> <b class='green'>Comment:</b> $row[2] <br><b class='green'>Date:</b> $row[3] </td>";
+                                        echo "</tr>";
+									}
+									pg_close($conn);	//close connection
+								?>
+							</table>
+						</form>
 					</div>
 				</div>
 				<div class="footer">
 					<p class="copyright">© COPYRIGHT 2013 ALL RIGHTS RESERVED</p>
 				</div>
+				<?php if(isset($_POST['submit'])) echo "<script type='text/javascript'>showSuccessToast('Successfully Saved');</script>";?>
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	<?php
-	echo "
-	<script>	
-		/*script for drawing charts of Income Graphs*/
-		function initiateGoogle(){
-			google.load(\"visualization\", \"1\", {packages:[\"corechart\"]});
-			google.setOnLoadCallback(drawChart);
-		}
-		function drawChart() {
-			var data = google.visualization.arrayToDataTable([
-				['Month', 'Sales'],";
-					$i=0;
-					while ($row = pg_fetch_row($result)) {
-						if($row[1]=='1') $month='January';		else if($row[1]=='2') $month='February';
-						else if($row[1]=='3') $month='March';	else if($row[1]=='4') $month='April';
-						else if($row[1]=='5') $month='May';		else if($row[1]=='6') $month='June';
-						else if($row[1]=='7') $month='July';	else if($row[1]=='8') $month='August';
-						else if($row[1]=='9') $month='September';	else if($row[1]=='10') $month='October';
-						else if($row[1]=='11') $month='November';	else if($row[1]=='12') $month='December';
-						
-						if(pg_num_rows($result)==$i+1) echo "['{$month}', {$row[0]}]";
-						else echo "['{$month}', {$row[0]}],";
-						$i++;
-					}
-				/*['November',  1000],
-				['December',  1170],
-				['January',  660],
-				['February',  1030]*/
-		echo "]) 	;
-
-			var options = {
-				title: 'Company Performance'
-			};
-
-			var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-			chart.draw(data, options);
-		}
-		/*End of Income Graphs*/
-	</script>";
-	pg_close($conn);	//close connection
-	?>
-	<script>initiateGoogle();</script>
 </html>

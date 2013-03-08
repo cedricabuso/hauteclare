@@ -94,21 +94,18 @@ function pwordMatch(){
 	else showSuccessToast("Passwords match.");
 }
 function ValidateSignup(){
-	var regexp = /^[0-9]+$/;
+	var regexp = /^\d{6}$/;
 	var regexp1 = /^[A-z ]+$/;
 	var form=document.signup;
 	alertmess="";
 
 	if (form.role[0].checked==false&&form.role[1].checked==false) alertmess+="Please choose role.";
 	else{
-		if (form.fname.value==""||form.fname.value==null||(!regexp1.test(form.id.value))) alertmess+="Please enter a valid first name.<br>";
-		if (form.lname.value==""||form.lname.value==null||(!regexp1.test(form.id.value))) alertmess+="Please enter a valid last name.<br>";
+		if ((form.fname.value==""||form.fname.value==null||(!regexp1.test(form.fname.value)))&&form.role[1].checked==true) alertmess+="Please enter a valid first name.<br>";
+		if ((form.lname.value==""||form.lname.value==null||(!regexp1.test(form.lname.value)))&&form.role[1].checked==true) alertmess+="Please enter a valid last name.<br>";
 		if (form.uname.value==""||form.uname.value==null) alertmess+="Please enter username.<br>";
 		if (form.newpwd.value.length<6) alertmess+="Please enter valid password (at least 6 chars).<br>";
-		if ((form.empno.value==""||form.empno.value==null||(!regexp.test(form.id.value)))&& form.role[0].checked==true) alertmess+="Please enter valid employee number.<br>";
-		if ((form.address.value==""||form.address.value==null)&& form.role[0].checked==true) alertmess+="Please enter address.<br>";
-		if (form.sex.selectedIndex==0 && form.role[0].checked==true) alertmess+="Please choose sex.<br>";
-		if((form.month.selectedIndex==0||form.day.selectedIndex==0||form.year.selectedIndex==0)&& form.role[0].checked==true) alertmess+="Please enter hire date.<br>";
+		if ((form.empno.value==""||form.empno.value==null||(!regexp.test(form.empno.value)))&& form.role[0].checked==true) alertmess+="Please enter valid employee number.<br>";
 	}	
 
 	if (alertmess==""){}
@@ -120,26 +117,21 @@ function ValidateSignup(){
 function Disable(){
 	var form=document.signup;
 	if (form.role[0].checked == true){
+		form.fname.value='';
+		form.lname.value='';
 		form.empno.disabled=false;
-		form.address.disabled=false;
-		form.sex.disabled=false;
-		form.month.disabled=false;
-		form.day.disabled=false;
-		form.year.disabled=false;
+		document.getElementById('fname').disabled=true;
+		document.getElementById('lname').disabled=true;
+		document.getElementById('fnameHidden').disabled=false;
+		document.getElementById('lnameHidden').disabled=false;
 	}
 	if (form.role[1].checked == true){
 		form.empno.value='';
 		form.empno.disabled=true;
-		form.address.value='';
-		form.address.disabled=true;
-		form.sex.selectedIndex=0;
-		form.sex.disabled=true;
-		form.month.selectedIndex=0;
-		form.month.disabled=true;
-		form.day.selectedIndex=0;
-		form.day.disabled=true;
-		form.year.selectedIndex=0;
-		form.year.disabled=true;
+		document.getElementById('fname').disabled=false;
+		document.getElementById('lname').disabled=false;
+		document.getElementById('fnameHidden').disabled=true;
+		document.getElementById('lnameHidden').disabled=true;
 	}
 }
 /*End of Sign Up*/
@@ -159,104 +151,86 @@ function ValidateLogin(){
 }
 /*End of Login*/
 
+/*script for Comment*/
+function ValidateAddComment(){
+	var form=document.addComment;
+	alertmess="";
+	
+	if (form.comment_name.value==""||form.comment_name.value==null) alertmess+="Please enter name<br>";
+	if (form.comment_text.value==""||form.comment_text.value==null) alertmess+="Please put in some comment";
+	if (alertmess==""){}
+	else{
+		showWarningToast(alertmess);
+		return false;
+	}
+}
+/*End of Comment*/
+
+/*script for Adding Item in Cashier System*/
+var checkout=0;
 function addProd(prodId,prodName,quantity,prodPrice){
-		
-<<<<<<< HEAD
-		if(quantity.value == 0) alert("Cannot add 0 "+prodName);
-		else{
-			var a = confirm("Add "+quantity.value+" piece(s) of "+prodName+"?");
-			if(a == true){
-				var tr = document.createElement("tr");
+	if(quantity.value == 0) showErrorToast("Cannot add 0 "+prodName);
+	else{
+		var a = confirm("Add "+quantity.value+" piece(s) of "+prodName+"?");
+		if(a == true){
+			var tr = document.createElement("tr");
+			
+			for(var i=0; i<5; i++){
+				var input = document.createElement("input");
+				var td = document.createElement("td");
 				
-				for(var i=0; i<5; i++){
-					var input = document.createElement("input");
-					var td = document.createElement("td");
-					
-					input.type = "text";
-					input.className = "center";
-					input.readOnly = true;
-					
-					if(i==0){
-						input.type = "hidden";
-						input.name = "prodPrice[]";
-						input.value = prodPrice;
-						document.getElementById("cashierForm").appendChild(input);
-					}
-					
-					else{
-					
-						if(i==1){
-							input.name = "prodId[]";
-							input.value = prodId;
-							td.appendChild(input);
-						}
-						
-						else if(i==2){
-							input.name = "prodName[]";
-							input.className = "centerBorder0";
-							input.value = prodName;
-							td.appendChild(input);
-						}
-						
-						else if(i==3){
-							input.name = "quantity[]";
-							input.value = quantity.value;
-							quantity.max = parseInt(quantity.max)-parseInt(quantity.value);
-							td.appendChild(input);
-						}
-						
-						else if(i==4){
-							input.value = parseInt(prodPrice)*parseInt(quantity.value);
-							document.getElementById("totalPayment").value = parseInt(document.getElementById("totalPayment").value)+parseInt(input.value);
-							td.appendChild(input);
-						}
-					
-						tr.appendChild(td);
-					}
+				input.type = "text";
+				input.className = "center";
+				input.readOnly = true;
+				
+				if(i==0){
+					input.type = "hidden";
+					input.name = "prodPrice[]";
+					input.value = prodPrice;
+					document.getElementById("cashierForm").appendChild(input);
 				}
 				
-				document.getElementById("toBuy").appendChild(tr);
+				else{
+				
+					if(i==1){
+						input.name = "prodId[]";
+						input.value = prodId;
+						td.appendChild(input);
+					}
+					
+					else if(i==2){
+						input.name = "prodName[]";
+						input.className = "centerBorder0";
+						input.value = prodName;
+						td.appendChild(input);
+					}
+					
+					else if(i==3){
+						input.name = "quantity[]";
+						input.value = quantity.value;
+						quantity.max = parseInt(quantity.max)-parseInt(quantity.value);
+						td.appendChild(input);
+					}
+					
+					else if(i==4){
+						input.value = parseInt(prodPrice)*parseInt(quantity.value);
+						document.getElementById("totalPayment").value = parseInt(document.getElementById("totalPayment").value)+parseInt(input.value);
+						td.appendChild(input);
+					}
+				
+					tr.appendChild(td);
+				}
 			}
+			document.getElementById("toBuy").appendChild(tr);
+			checkout++;
 		}
+	}
 }
-
-/*script for drawing charts of Income Graphs*/
-function initiateGoogle(){
-	google.load("visualization", "1", {packages:["corechart"]});
-    google.setOnLoadCallback(drawChart);
+function ValidateCheckout(){
+	if (checkout!=0) return true;
+	else{
+		showWarningToast('Must add a product to checkout.');
+		return false;
+	}
 }
-function drawChart() {
-	var data = google.visualization.arrayToDataTable([
-		['Month', 'Sales'],
-		['November',  1000],
-		['December',  1170],
-		['January',  660],
-		['February',  1030]
-	]) 	;
-
-	var options = {
-		title: 'Company Performance'
-	};
-
-	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-	chart.draw(data, options);
-}
-/*End of Income Graphs*/
-=======
-		amount.type = 'text';
-		quantity.type = 'number';
-		quantity.min = '0';
-		quantity.max = '100';
-		quantity.value = '0';
-		item.type = 'text';
-		item.value = e1.value;
-		item.disabled = 'disable';
-		td1.appendChild(item);
-		td2.appendChild(quantity);
-		td3.appendChild(amount);
-		tr.appendChild(td1);
-		tr.appendChild(td2);
-		tr.appendChild(td3);
-		e2.appendChild(tr);		
-}
->>>>>>> origin/v1.03
+/*End of Cashier System*/

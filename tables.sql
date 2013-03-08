@@ -49,3 +49,10 @@ CREATE TABLE __user(
 	pword varchar(30),
 	user_role varchar(10)
 );
+
+CREATE TABLE comments(
+  comment_name character varying(140),
+  comment_email character varying(30),
+  comment_text character varying(140),
+  comment_date character varying(50)
+);
