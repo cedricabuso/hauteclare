@@ -31,7 +31,7 @@ CREATE TABLE product(
 
 CREATE TABLE inventory(
 	prod_id int REFERENCES product(prod_id),
-	prod_quantity int,
+-	prod_quantity int,
 	inv_date date
 );
 
@@ -41,6 +41,20 @@ CREATE TABLE cashier(
 	prod_quantity int,
 	prod_price int,
 	cash_date date
+);
+
+CREATE TABLE product_list(
+	prod_id int PRIMARY KEY,
+	prod_name varchar(60),
+	prod_price int
+);
+
+CREATE TABLE bulkorder(
+	prod_id int REFERENCES product(prod_id),
+	prod_name varchar(60),
+	prod_quantity int,
+	prod_amount int,
+	bulk_order_date date
 );
 
 CREATE TABLE __user(
