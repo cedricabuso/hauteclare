@@ -10,79 +10,59 @@
 	  <link href="../../css/style.css" rel="stylesheet" type="text/css">
 	</head>
 	<?php //connect
-		$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
-		if (!$conn) {
-			die("Error in connection: " . pg_last_error());
-		}
-		session_start();
+		
 	?>
 	<body>
 		<div class="wrapper">
 			<div class="main">
-				<div class="header">
-					Ahl's Cakes
-				</div>
-				
+				<div class="header">Ahl's Cakes</div>
+
 				<div class="mid">
 					<div class="mid-left">
-						<h2 class="gap-2">Menu</h2>
-<<<<<<< HEAD
-						<ul class="left-nav">
-						  <li><a href="index.html">Home</a></li>
-						  <li><a href="modules/view_all_products/">View Products</a></li>
-=======
+						<h2 class="gap-2">MENU</h2>
 						<ul class="left-nav bmenu">
-						  <li class="top"><a href="../../index.html">Home</a></li>
-						  <li><a href="../view_all_products/">View Products</a></li>
->>>>>>> origin/v1.03
-						  <li><a href="#">Order Online</a></li>
+						  <li class="top"><a href="../../">Home</a></li>
+						  <li><a href="../customer_view_products/?offset=0&pgnum=0">View Products</a></li>
+						  <li><a href="../bulk_order/">Order Online</a></li>
+						  <li><a href="../comments/">Comment</a></li>
 						  <li><a href="#">Contact</a></li>
 						  <li class="bottom"><a href="#">About Us</a></li>
 						</ul>
-<<<<<<< HEAD
 						<?php
+							session_start();
+							$top=0;
 							if(!isset($_SESSION["role"])){
-								echo "<h2 class=\"gap-2\">Login</h2>
-									<ul class=\"left-nav\">
-									<li>";
+								echo "<h2 class=\"gap-2\">LOGIN</h2>
+									<ul class=\"left-nav bmenu\">
+									<li class='login top'>";
 								include("../login/index.php");
-								echo "<li><a href=\"modules/sign_up/\">Sign Up</a></li>";
+								echo "<li class='bottom'><a href=\"../sign_up/\">Sign Up</a></li>";
 								echo "</li>
 									</ul>";
 							}
 							else{
-								echo "<h2 class=\"gap-2\">Employee</h2>
-								<ul class=\"left-nav\">";
+								$role=strtoupper($_SESSION["role"]); 
+								echo "<h2 class=\"gap-2\">{$role}</h2>
+								<ul class=\"left-nav bmenu\">";
 								if($_SESSION["role"]=="owner"){
-									echo "<li><a href=\"modules/add_employee/\">Add Employee</a></li>";
+									echo "<li class='top'><a href=\"../add_employee/\">Add Employee</a></li>
+										  <li><a href='../delete_employee/'>Delete Employee</a></li>
+										  <li><a href='../search_employee/'>Search Employee</a></li>
+										  <li><a href='../view_all_employee/'>View All Employee</a></li>";
+									$top=1;
 								}
 								if($_SESSION["role"]=="employee" || $_SESSION["role"]=="owner"){
-										echo "<li><a href=\"modules/income_graphs/\">Income Graphs</a></li>
-										  <li><a href=\"modules/income_reports/\">Income Reports</a></li>
-										  <li><a href=\"modules/inventory_system/\">Inventory System</a></li>
-										  <li><a href=\"modules/add_product\">Add Product</a></li>
-										  <li><a href=\"modules/delete_product\">Delete Product</a></li>";
+										if($top==1) echo "<li><a href='../cashier_system/'>Cashier System</a></li>";
+										else echo "<li class='top'><a href='../cashier_system/'>Cashier System</a></li>";
+										echo "<li><a href='../inventory_system/'>Inventory System</a></li>
+											  <li><a href='../income_reports/'>Income Reports</a></li>
+											  <li><a href='../income_graphs/'>Income Graphs</a></li>
+											  <li><a href='../add_product/'>Add Product</a></li>
+											  <li><a href='../delete_product/'>Delete Product</a></li>
+											  <li class='bottom'><a href=\"../logout/index.php\">Logout</a></li>";
 								}
-								echo "</ul>";
-								echo "<ul class=\"left-nav\"><li><a href=\"modules/logout/index.php\">Logout</a></li></ul>";
 							}
 						?>
-=======
-						<h2 class="gap-2">Employee</h2>
-						<ul class="left-nav bmenu">
-						  <li class="top"><a href="../login/">Login</a></li>
-						  <li><a href="../sign_up/">Sign Up</a></li>
-						  <li><a href="../add_employee/">Add Employee</a></li>
-						  <li><a href="../delete_employee/">Delete Employee</a></li>
-						  <li><a href="../search_employee/">Search Employee</a></li>
-						  <li><a href="../view_all_employee/">View All Employee</a></li>
-						  <li><a href="../income_graphs/">Income Graphs</a></li>
-						  <li><a href="../income_reports/">Income Reports</a></li>
-						  <li><a href="../inventory_system/">Inventory System</a></li>
-						  <li><a href="../add_product/">Add Product</a></li>
-						  <li class="bottom"><a href="../delete_product/">Delete Product</a></li>
-						</ul>
->>>>>>> origin/v1.03
 					</div>
 					<div class="mid-right">
 						<h1 class="gap-1">View All Product</h1>
@@ -91,12 +71,15 @@
 								<tr>
 									<td class="deleteId">Image</td>
 									<td class="deleteId">Information</td>
-									<?php
-										if(isset($_SESSION["role"]))
-											echo "<td class=\"deleteId\">Action</td>";
+									<?php 
+										if(isset($_SESSION["role"])) echo "<td class='deleteId'>Action</td>";
 									?>
 								</tr>
 								<?php //load the list of existing products
+									$conn = pg_connect("host=localhost port=5432 dbname=ahlscake user=postgres password=admin");
+									if (!$conn) {
+										die("Error in connection: " . pg_last_error());
+									}
 									$i=0;
 									$result = pg_query($conn, "SELECT * FROM product");
 									while ($row = pg_fetch_row($result)) {
@@ -104,11 +87,11 @@
 										echo "<td class='TDR'><img id='{$row[1]}' src='../../products/$row[1].jpg' width='200' height='200' onerror='imgError(\"$row[1]\");'/></td> <td class='TDR description'> <b class='green'>Name:</b> $row[1] <br> <b class='green'>Price:</b> $row[4] <br> <b class='green'>Description:</b> $row[2]</td>" ;
 										if(isset($_SESSION["role"])){
 											echo "<td class='TDR'>
-												  <form name='myForm{$i}' method='post' action='../edit_product/index.php'> 
-													<input type='hidden' name='id' value='{$row[0]}'/>
-													<input type='submit' name='edit' id='submit' value='Edit'/>
-												  </form>
-												  </td>";
+											  <form name='myForm{$i}' method='post' action='../edit_product/index.php'> 
+												<input type='hidden' name='id' value='{$row[0]}'/>
+												<input type='submit' name='edit' id='submit' value='Edit'/>
+											  </form>
+											  </td>";
 											echo "</tr>";
 										}
 									}

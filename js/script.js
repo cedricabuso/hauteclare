@@ -16,11 +16,15 @@ function setPostValue(id){
 	return true;
 }
 
+function redirect(){
+	window.location = '../payment_system';
+}
+
 /*Image Processing*/
 flag=0;
 function imgError(source){
 	if(flag==0){ document.getElementById(source).src="../../products/"+source+".png"; flag++;}
-	else {showErrorToast(source+" image is not found."); flag=0;}
+	else {showErrorToast(source+" image is not found."); flag=0;};
 }
 function empImgError(source){
 	if(flag==0){ document.getElementById(source).src="../../employees/"+source+".png"; flag++;}
@@ -94,21 +98,18 @@ function pwordMatch(){
 	else showSuccessToast("Passwords match.");
 }
 function ValidateSignup(){
-	var regexp = /^[0-9]+$/;
+	var regexp = /^\d{6}$/;
 	var regexp1 = /^[A-z ]+$/;
 	var form=document.signup;
 	alertmess="";
 
 	if (form.role[0].checked==false&&form.role[1].checked==false) alertmess+="Please choose role.";
 	else{
-		if (form.fname.value==""||form.fname.value==null||(!regexp1.test(form.id.value))) alertmess+="Please enter a valid first name.<br>";
-		if (form.lname.value==""||form.lname.value==null||(!regexp1.test(form.id.value))) alertmess+="Please enter a valid last name.<br>";
+		if ((form.fname.value==""||form.fname.value==null||(!regexp1.test(form.fname.value)))&&form.role[1].checked==true) alertmess+="Please enter a valid first name.<br>";
+		if ((form.lname.value==""||form.lname.value==null||(!regexp1.test(form.lname.value)))&&form.role[1].checked==true) alertmess+="Please enter a valid last name.<br>";
 		if (form.uname.value==""||form.uname.value==null) alertmess+="Please enter username.<br>";
 		if (form.newpwd.value.length<6) alertmess+="Please enter valid password (at least 6 chars).<br>";
-		if ((form.empno.value==""||form.empno.value==null||(!regexp.test(form.id.value)))&& form.role[0].checked==true) alertmess+="Please enter valid employee number.<br>";
-		if ((form.address.value==""||form.address.value==null)&& form.role[0].checked==true) alertmess+="Please enter address.<br>";
-		if (form.sex.selectedIndex==0 && form.role[0].checked==true) alertmess+="Please choose sex.<br>";
-		if((form.month.selectedIndex==0||form.day.selectedIndex==0||form.year.selectedIndex==0)&& form.role[0].checked==true) alertmess+="Please enter hire date.<br>";
+		if ((form.empno.value==""||form.empno.value==null||(!regexp.test(form.empno.value)))&& form.role[0].checked==true) alertmess+="Please enter valid employee number.<br>";
 	}	
 
 	if (alertmess==""){}
@@ -120,26 +121,21 @@ function ValidateSignup(){
 function Disable(){
 	var form=document.signup;
 	if (form.role[0].checked == true){
+		form.fname.value='';
+		form.lname.value='';
 		form.empno.disabled=false;
-		form.address.disabled=false;
-		form.sex.disabled=false;
-		form.month.disabled=false;
-		form.day.disabled=false;
-		form.year.disabled=false;
+		document.getElementById('fname').disabled=true;
+		document.getElementById('lname').disabled=true;
+		document.getElementById('fnameHidden').disabled=false;
+		document.getElementById('lnameHidden').disabled=false;
 	}
 	if (form.role[1].checked == true){
 		form.empno.value='';
 		form.empno.disabled=true;
-		form.address.value='';
-		form.address.disabled=true;
-		form.sex.selectedIndex=0;
-		form.sex.disabled=true;
-		form.month.selectedIndex=0;
-		form.month.disabled=true;
-		form.day.selectedIndex=0;
-		form.day.disabled=true;
-		form.year.selectedIndex=0;
-		form.year.disabled=true;
+		document.getElementById('fname').disabled=false;
+		document.getElementById('lname').disabled=false;
+		document.getElementById('fnameHidden').disabled=true;
+		document.getElementById('lnameHidden').disabled=true;
 	}
 }
 /*End of Sign Up*/
@@ -159,109 +155,91 @@ function ValidateLogin(){
 }
 /*End of Login*/
 
+/*script for Comment*/
+function ValidateAddComment(){
+	var form=document.addComment;
+	alertmess="";
+	
+	if (form.comment_name.value==""||form.comment_name.value==null) alertmess+="Please enter name<br>";
+	if (form.comment_text.value==""||form.comment_text.value==null) alertmess+="Please put in some comment";
+	if (alertmess==""){}
+	else{
+		showWarningToast(alertmess);
+		return false;
+	}
+}
+/*End of Comment*/
+
+/*script for Adding Item in Cashier System*/
+var checkout=0;
 function addProd(prodId,prodName,quantity,prodPrice){
-		
-<<<<<<< HEAD
-		if(quantity.value == 0) alert("Cannot add 0 "+prodName);
-		else{
-			var a = confirm("Add "+quantity.value+" piece(s) of "+prodName+"?");
-			if(a == true){
-				var tr = document.createElement("tr");
+	if(quantity.value == 0) showErrorToast("Cannot add 0 "+prodName);
+	else{
+		var a = confirm("Add "+quantity.value+" piece(s) of "+prodName+"?");
+		if(a == true){
+			var tr = document.createElement("tr");
+			
+			for(var i=0; i<5; i++){
+				var input = document.createElement("input");
+				var td = document.createElement("td");
 				
-				for(var i=0; i<5; i++){
-					var input = document.createElement("input");
-					var td = document.createElement("td");
-					
-					input.type = "text";
-					input.className = "center";
-					input.readOnly = true;
-					
-					if(i==0){
-						input.type = "hidden";
-						input.name = "prodPrice[]";
-						input.value = prodPrice;
-						document.getElementById("cashierForm").appendChild(input);
-					}
-					
-					else{
-					
-						if(i==1){
-							input.name = "prodId[]";
-							input.value = prodId;
-							td.appendChild(input);
-						}
-						
-						else if(i==2){
-							input.name = "prodName[]";
-							input.className = "centerBorder0";
-							input.value = prodName;
-							td.appendChild(input);
-						}
-						
-						else if(i==3){
-							input.name = "quantity[]";
-							input.value = quantity.value;
-							quantity.max = parseInt(quantity.max)-parseInt(quantity.value);
-							td.appendChild(input);
-						}
-						
-						else if(i==4){
-							input.value = parseInt(prodPrice)*parseInt(quantity.value);
-							document.getElementById("totalPayment").value = parseInt(document.getElementById("totalPayment").value)+parseInt(input.value);
-							td.appendChild(input);
-						}
-					
-						tr.appendChild(td);
-					}
+				input.type = "text";
+				input.className = "center";
+				input.readOnly = true;
+				
+				if(i==0){
+					input.type = "hidden";
+					input.name = "prodPrice[]";
+					input.value = prodPrice;
+					document.getElementById("cashierForm").appendChild(input);
 				}
 				
-				document.getElementById("toBuy").appendChild(tr);
+				else{
+				
+					if(i==1){
+						input.name = "prodId[]";
+						input.value = prodId;
+						td.appendChild(input);
+					}
+					
+					else if(i==2){
+						input.name = "prodName[]";
+						input.className = "centerBorder0";
+						input.value = prodName;
+						td.appendChild(input);
+					}
+					
+					else if(i==3){
+						input.name = "quantity[]";
+						input.value = quantity.value;
+						quantity.max = parseInt(quantity.max)-parseInt(quantity.value);
+						td.appendChild(input);
+					}
+					
+					else if(i==4){
+						input.value = parseInt(prodPrice)*parseInt(quantity.value);
+						document.getElementById("totalPayment").value = parseInt(document.getElementById("totalPayment").value)+parseInt(input.value);
+						td.appendChild(input);
+					}
+				
+					tr.appendChild(td);
+				}
 			}
+			document.getElementById("toBuy").appendChild(tr);
+			checkout++;
 		}
+	}
 }
-
-/*script for drawing charts of Income Graphs*/
-function initiateGoogle(){
-	google.load("visualization", "1", {packages:["corechart"]});
-    google.setOnLoadCallback(drawChart);
+function ValidateCheckout(){
+	if (checkout!=0) return true;
+	else{
+		showWarningToast('Must add a product to checkout.');
+		return false;
+	}
 }
-function drawChart() {
-	var data = google.visualization.arrayToDataTable([
-		['Month', 'Sales'],
-		['November',  1000],
-		['December',  1170],
-		['January',  660],
-		['February',  1030]
-	]) 	;
+/*End of Cashier System*/
 
-	var options = {
-		title: 'Company Performance'
-	};
-
-	var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-	chart.draw(data, options);
-}
-/*End of Income Graphs*/
-=======
-		amount.type = 'text';
-		quantity.type = 'number';
-		quantity.min = '0';
-		quantity.max = '100';
-		quantity.value = '0';
-		item.type = 'text';
-		item.value = e1.value;
-		item.disabled = 'disable';
-		td1.appendChild(item);
-		td2.appendChild(quantity);
-		td3.appendChild(amount);
-		tr.appendChild(td1);
-		tr.appendChild(td2);
-		tr.appendChild(td3);
-		e2.appendChild(tr);		
-}
-
-/*End of Income Graphs*/
-
+/*script for Bulk Order and Online Payment*/
 function myFunction(price,quan,total){
 	var discount;
 	if(quan > 20 && quan < 50) discount = 0.95;
@@ -275,7 +253,6 @@ function myFunction(price,quan,total){
 
 	total.value = (parseInt(price)*parseInt(quan)*discount).toFixed(2);
 }
-
 function bulkorder(prodlist){
 	var hidden = document.getElementById(prodlist).value;
 	var tr = document.createElement("tr");
@@ -314,13 +291,11 @@ function bulkorder(prodlist){
 	document.getElementById("order").appendChild(tr);
 	counter.value = parseInt(counter.value)+1;
 }
-
 function dateCheck(today){
   expiryDate = document.getElementById('expiryDate').value;
   
   if(expiryDate < today) showErrorToast("Card is already expired");
 }
-
 function testCreditCard () {
   myCardNo = document.getElementById('CardNumber').value;
   myCardType = document.getElementById('CardType').value;
@@ -341,13 +316,10 @@ ccErrors [3] = "Credit card number is invalid";
 ccErrors [4] = "Credit card number has an inappropriate number of digits";
 ccErrors [5] = "Warning! This credit card number is associated with a scam attempt";
 
-function checkCreditCard (cardnumber, cardname) {
-     
+function checkCreditCard (cardnumber, cardname) {     
   // Array to hold the permitted card characteristics
   var cards = new Array();
-
   // Define the cards we support. You may add addtional card types as follows.
-  
   //  Name:         As in the selection box of the form - must be same as user's
   //  Length:       List of possible valid lengths of the card number for the card
   //  prefixes:     List of possible prefixes for the card
@@ -441,9 +413,9 @@ function checkCreditCard (cardnumber, cardname) {
   }
        
   // Now check the modulus 10 check digit - if required
-  if (cards[cardType].checkdigit) {
+ if (cards[cardType].checkdigit) {
     var checksum = 0;                                  // running checksum total
-    var mychar = "";                                   // next char to process
+	var mychar = "";                                   // next char to process
     var j = 1;                                         // takes value of 1 or 2
   
     // Process each digit one by one starting at the right
@@ -476,10 +448,9 @@ function checkCreditCard (cardnumber, cardname) {
   
   // Check it's not a spam number
   if (cardNo == '5490997771092064') { 
-    ccErrorNo = 5;
+	ccErrorNo = 5;
     return false; 
   }
-
   // The following are the card-specific checks we undertake.
   var LengthValid = false;
   var PrefixValid = false; 
@@ -520,4 +491,4 @@ function checkCreditCard (cardnumber, cardname) {
   // The credit card is in the required format.
   return true;
 }
->>>>>>> origin/v1.03
+/*End of Bulk Order and Online Payment*/

@@ -10,7 +10,6 @@ div, p, span, a, ul, ol, li, h1, h2, h3, h4, h5, h6, form {
 .wrapper {
 	margin:0px auto;
 	padding:0px;
-	background:#FFFFFF;
 	width:100%;
 	overflow:hidden;
 	}
@@ -209,10 +208,8 @@ table.table{
 	padding: 5px 5px 5px 5px;
 	text-align: center;
 }
-.bestsellers{
-	text-align: center;
-	font-weight:bold;
-	padding-left:50px;
+.viewAllComments td{
+	width: 50%;
 }
 .TDR{
 	border: solid 1px #000;
@@ -225,47 +222,63 @@ table.table{
 	font-size:15px;
 	font-weight: bold;
 }
-.center {
-	text-align:center;
-	width: 60px;
+.logout{
+	border-radius: 10px;
 }
-.centerBorder0 {
-	text-align: center;
+.date{
+	font-size: 34px;
 }
-.borderLess{
-	border: 0;
+.bestsellers{
 	text-align: center;
+	font-weight:bold;
+	padding-left:50px;
+}
+ul{border:0; margin:0; padding:0}
+#pagination  li{
+	border:0; margin:0; padding:0;
+	font-size:15px;
+	list-style:none;
+	display:in
+}
+#pagination a{
+	border:solid 1px #DDDDDD;
+	margin-right:2px;
+}
+#pagination a:link,
+#pagination a:visited {
+	color:#0063e3;
+	display:block;
+	float:left;
+	padding:3px 6px;
+	text-decoration:none;
+}
+#pagination a:hover{
+	border:solid 1px #666666;
+}
+
+ul.left-nav li.login{
+	padding: 10px 0px 10px 10px;
+}
+input[type='submit'], #AjaxUploaderFilesButton {
+  color: #ffffff;
+  text-align: center;
+  background-color: #0d7ba5;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  border-color: #289cc8;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 13px;
+  padding: 2px 6px;
+  text-decoration: none;
+  vertical-align: top;
+  white-space: nowrap;
 }
 #chart_div{
 	text-align:center;
 	padding:0px 0px 0px 0px;
 	height: 500px;
-<<<<<<< HEAD
-	width: 680px;
-}
-
-ul{border:0; margin:0; padding:0}
-#pagination  li{
-border:0; margin:0; padding:0;
-font-size:15px;
-list-style:none;
-display:in
-}
-#pagination a{
-border:solid 1px #DDDDDD;
-margin-right:2px;
-}
-#pagination a:link,
-#pagination a:visited {
-color:#0063e3;
-display:block;
-float:left;
-padding:3px 6px;
-text-decoration:none;
-}
-#pagination a:hover{
-border:solid 1px #666666;
-=======
 	width: 100%;
->>>>>>> origin/v1.03
 }

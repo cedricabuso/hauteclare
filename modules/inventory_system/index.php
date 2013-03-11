@@ -14,7 +14,6 @@
 		if (!$conn) {
 			die("Error in connection: " . pg_last_error());
 		}
-		session_start();
 		$date = date("Y-m-d");
 		$existing=false;
 		$result = pg_query($conn, "SELECT * FROM inventory");
@@ -37,80 +36,63 @@
 				$array_id[$i]=$_POST["prod_id{$i}"];
 			}
 			//execute query then close connection
-			for($i=0;$i<$count;$i++){ pg_query($conn, "UPDATE inventory SET prod_quantity='{$array[$i]}' WHERE prod_id={$array_id[$i]} AND inv_date='{$date}'"); }
+			for($i=0;$i<$count;$i++){ pg_query($conn, "UPDATE inventory SET prod_quantity={$array[$i]} WHERE prod_id={$array_id[$i]} AND inv_date='{$date}'"); }
 		}
 	?>
 	<body>
 		<div class="wrapper">
 			<div class="main">
-				<div class="header">
-					Ahl's Cakes
-				</div>
-				
+				<div class="header">Ahl's Cakes</div>
+
 				<div class="mid">
 					<div class="mid-left">
-						<h2 class="gap-2">Menu</h2>
-<<<<<<< HEAD
-						<ul class="left-nav">
-						  <li><a href="index.html">Home</a></li>
-						  <li><a href="modules/view_all_products/">View Products</a></li>
-=======
+						<h2 class="gap-2">MENU</h2>
 						<ul class="left-nav bmenu">
-						  <li class="top"><a href="../../index.html">Home</a></li>
-						  <li><a href="../view_all_products/">View Products</a></li>
->>>>>>> origin/v1.03
-						  <li><a href="#">Order Online</a></li>
+						  <li class="top"><a href="../../">Home</a></li>
+						  <li><a href="../customer_view_products/?offset=0&pgnum=0">View Products</a></li>
+						  <li><a href="../bulk_order/">Order Online</a></li>
+						  <li><a href="../comments/">Comment</a></li>
 						  <li><a href="#">Contact</a></li>
 						  <li class="bottom"><a href="#">About Us</a></li>
 						</ul>
-<<<<<<< HEAD
 						<?php
+							session_start();
+							$top=0;
 							if(!isset($_SESSION["role"])){
-								echo "<h2 class=\"gap-2\">Login</h2>
-									<ul class=\"left-nav\">
-									<li>";
+								echo "<h2 class=\"gap-2\">LOGIN</h2>
+									<ul class=\"left-nav bmenu\">
+									<li class='login top'>";
 								include("../login/index.php");
-								echo "<li><a href=\"modules/sign_up/\">Sign Up</a></li>";
+								echo "<li class='bottom'><a href=\"../sign_up/\">Sign Up</a></li>";
 								echo "</li>
 									</ul>";
 							}
 							else{
-								echo "<h2 class=\"gap-2\">Employee</h2>
-								<ul class=\"left-nav\">";
+								$role=strtoupper($_SESSION["role"]); 
+								echo "<h2 class=\"gap-2\">{$role}</h2>
+								<ul class=\"left-nav bmenu\">";
 								if($_SESSION["role"]=="owner"){
-									echo "<li><a href=\"modules/add_employee/\">Add Employee</a></li>";
+									echo "<li class='top'><a href=\"../add_employee/\">Add Employee</a></li>
+										  <li><a href='../delete_employee/'>Delete Employee</a></li>
+										  <li><a href='../search_employee/'>Search Employee</a></li>
+										  <li><a href='../view_all_employee/'>View All Employee</a></li>";
+									$top=1;
 								}
 								if($_SESSION["role"]=="employee" || $_SESSION["role"]=="owner"){
-										echo "<li><a href=\"modules/income_graphs/\">Income Graphs</a></li>
-										  <li><a href=\"modules/income_reports/\">Income Reports</a></li>
-										  <li><a href=\"modules/inventory_system/\">Inventory System</a></li>
-										  <li><a href=\"modules/add_product\">Add Product</a></li>
-										  <li><a href=\"modules/delete_product\">Delete Product</a></li>";
+										if($top==1) echo "<li><a href='../cashier_system/'>Cashier System</a></li>";
+										else echo "<li class='top'><a href='../cashier_system/'>Cashier System</a></li>";
+										echo "<li><a href='../inventory_system/'>Inventory System</a></li>
+											  <li><a href='../income_reports/'>Income Reports</a></li>
+											  <li><a href='../income_graphs/'>Income Graphs</a></li>
+											  <li><a href='../add_product/'>Add Product</a></li>
+											  <li><a href='../delete_product/'>Delete Product</a></li>
+											  <li class='bottom'><a href=\"../logout/index.php\">Logout</a></li>";
 								}
-								echo "</ul>";
-								echo "<ul class=\"left-nav\"><li><a href=\"modules/logout/index.php\">Logout</a></li></ul>";
 							}
 						?>
-
-=======
-						<h2 class="gap-2">Employee</h2>
-						<ul class="left-nav bmenu">
-						  <li class="top"><a href="../login/">Login</a></li>
-						  <li><a href="../sign_up/">Sign Up</a></li>
-						  <li><a href="../add_employee/">Add Employee</a></li>
-						  <li><a href="../delete_employee/">Delete Employee</a></li>
-						  <li><a href="../search_employee/">Search Employee</a></li>
-						  <li><a href="../view_all_employee/">View All Employee</a></li>
-						  <li><a href="../income_graphs/">Income Graphs</a></li>
-						  <li><a href="../income_reports/">Income Reports</a></li>
-						  <li><a href="../inventory_system/">Inventory System</a></li>
-						  <li><a href="../add_product/">Add Product</a></li>
-						  <li class="bottom"><a href="../delete_product/">Delete Product</a></li>
-						</ul>
->>>>>>> origin/v1.03
 					</div>
 					<div class="mid-right">
-						<h1 class="gap-1">Inventory System <br> <span class="date"><?php echo date("F j, Y - l"); ?></span></h1>
+						<h1 class="gap-1">Inventory System <br><br> <span class="date"><?php echo date("F j, Y - l"); ?></span></h1>
 						
 						<form name="editQuantity" method="post" action="">
 							<table class="viewAllTable">
@@ -121,9 +103,9 @@
 								</tr>
 								<?php //load the list of existing products
 									$i=0;
-									$result = pg_query($conn, "SELECT * FROM product");
-									$stock = pg_query($conn, "SELECT * FROM inventory WHERE inv_date='{$date}'");
+									$result = pg_query($conn, "SELECT * FROM product ORDER BY prod_id");
 									while ($row = pg_fetch_row($result)) {
+										$stock = pg_query($conn, "SELECT * FROM inventory WHERE inv_date='{$date}'");
 										while($quan = pg_fetch_row($stock)){
 											if($quan[0]==$row[0]) break;
 										}
